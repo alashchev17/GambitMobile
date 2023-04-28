@@ -1,4 +1,5 @@
 package com.example.gambitmobile;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,23 +11,40 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gambitmobile.R;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import com.example.gambitmobile.function.WebSocket;
+
 
 public class MainActivity extends AppCompatActivity {
-    private WebView mywebView;
+
+
+
+    private WebView client;
+    private WebSocket ws;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mywebView =(WebView) findViewById(R.id.webview);
-        mywebView.setWebViewClient(new WebViewClient());
-        WebSettings webSettings=mywebView.getSettings();
+        client =(WebView) findViewById(R.id.webview);
+        client.setWebViewClient(new WebViewClient());
+        WebSettings webSettings=client.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        mywebView.setWebViewClient(new WebClient());
-        mywebView.setWebChromeClient(new ChromeClient());
-        mywebView.loadUrl("file:///android_asset/index.html");
-        mywebView.addJavascriptInterface(new JavaScriptInterface(this), "javafunc");
-
+        client.setWebViewClient(new WebClient());
+        client.setWebChromeClient(new ChromeClient());
+        client.loadUrl("file:///android_asset/index.html");
+        client.addJavascriptInterface(new JavaScriptInterface(this), "javafunc");
+        try {
+            ws = new WebSocket(new URI(
+                    "ws://localhost:4327/launcher"));
+            ws.connect();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
     public class WebClient extends WebViewClient{
 
@@ -42,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        if(mywebView.canGoBack()) {
-            mywebView.goBack();
+        if(client.canGoBack()) {
+            client.goBack();
         }
         else{
             super.onBackPressed();
