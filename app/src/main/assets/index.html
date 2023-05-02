@@ -1,1 +1,254 @@
-<h5>Тут должна быть верстка</h5>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Gambit Mobile</title>
+</head>
+<body>
+  <div class="root">
+    <div class="first-display">
+      <img src="./images/logo.svg" alt="Gambit RP Logotype" class="first-display__logo">
+    </div>
+    <!-- /.first-display -->
+    <div class="loading-display loading-display--dnone">
+      <img src="./images/logo.svg" alt="Gambit RP Logotype" class="loading-display__logo">
+      <div class="loading-display__info">
+        <h1 class="loading-display__title">Установка файлов игры...</h1>
+        <span class="loading-display__bar">
+          <span class="loading-display__gradient"></span>
+        </span>
+        <p class="loading-display__status">
+          <span class="loading-display__speed">50 MB/s</span>
+          (<span class="loading-display__downloaded">500 MB</span> из 2 GB)
+        </p>
+      </div>
+      <!-- /.loading-display__info -->
+    </div>
+    <!-- /.loading-display -->
+    <div class="intro-display intro-display--dnone">
+      <div class="intro-display__background"></div>
+      <h1 class="intro-display__title">Погружайся в мир который ты захочешь</h1>
+      <p class="intro-display__subtitle">Держи комфортный и качественный ролеплей в своем смарфтоне</p>
+      <a href="#" class="button intro-display__button button--primary">Начать сейчас</a>
+    </div>
+    <!-- /.intro-display -->
+    <div class="auth-display auth-display--dnone">
+      <img src="./images/logo.svg" alt="Gambit RP Logotype" class="auth-display__logo">
+      <form action="#" class="auth-display__form">
+        <label for="login" class="auth-display__label">Имя пользователя</label>
+        <input id="login" name="login" type="text" placeholder="Введите имя пользователя" class="input auth-display__input">
+        <div class="auth-display__row">
+          <label for="password" class="auth-display__label">Пароль</label>
+          <a href="#" class="auth-display__link" tabindex="-1">Забыли пароль?</a>
+        </div>
+        <!-- /.auth-display__row -->
+        <div class="auth-display__block">
+          <input id="password" name="password" type="password" placeholder="Введите пароль" class="input auth-display__input">
+          <a href="#" class="password-control" onclick="return showHidePassword(this);"></a>
+        </div>
+        <!-- /.auth-display__block -->
+        <div class="auth-display__checkbox checkbox">
+          <input
+            type="checkbox"
+            class="checkbox__input checkbox__input--hidden"
+            id="checkbox__input"
+            name="checkbox"
+          />
+          <label for="#" class="checkbox__label" id="checkbox__label"></label>
+          <span for="checkbox__input" class="auth-display__label" id="checkbox__span">Запомните меня</span>
+        </div>
+        <!-- /.modal-checkbox -->
+        <button class="button auth-display__button button--primary" type="submit">Войти в аккаунт</button>
+      </form>
+      <span class="auth-display__register">Нет аккаунта? <a href="#" class="auth-display__link">Зарегистрируйтесь</a></span>
+    </div>
+    <!-- /.auth-display -->
+    <div class="google-display google-display--dnone">
+      <div class="google-display__header">
+        <a href="#" class="google-display__return">Назад</a>
+        <img src="./images/logo.svg" alt="Gambit RP Logotype" class="google-display__logo">
+      </div>
+      <!-- /.google-display__header -->
+      <h1 class="google-display__title">Google Authentificator</h1>
+      <span class="google-display__subtitle">Введите код с приложения Google Authentificator</span>
+      <div class="google-display__inputs">
+        <input type="number" maxlength="1" class="google-display__input" />
+        <input type="number" maxlength="1" class="google-display__input" />
+        <input type="number" maxlength="1" class="google-display__input" />
+        <input type="number" maxlength="1" class="google-display__input" />
+        <input type="number" maxlength="1" class="google-display__input" />
+        <input type="number" maxlength="1" class="google-display__input" />
+      </div>
+      <span class="google-display__error">Неверный код</span>
+      <!-- /.google-display__inputs -->
+    </div>
+    <!-- /.google-display -->
+    <div class="main-display main-display--dnone">
+      <div class="main-content active">
+        <div class="container">
+          <div class="main-display__row jc-sb">
+            <h1 class="main-display__title">Привет, <span id="nickname">GitHub.</span>!</h1>
+            <a href="#" class="main-display__notification"></a>
+          </div>
+          <!-- /.main-display__row -->
+          <div class="main-display__row">
+            <span class="main-display__status main-display__status--access">Установлена актуальная версия лаунчера</span>
+          </div>
+          <!-- /.main-display__row -->
+          <div class="main-display__row g-8">
+            <a  href="#" class="main-display__card news-card">
+              <div class="news-card__wrapper"></div>
+              <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+              <h2 class="news-card__title">Обновление игрового мода</h2>
+              <span class="news-card__date">8 Апреля 2023 г.</span>
+            </a>
+            <!-- /.main-display__news-item -->
+            <a href="#" class="main-display__card news-card">
+              <div class="news-card__wrapper"></div>
+              <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+              <h2 class="news-card__title">Обновление игрового мода</h2>
+              <span class="news-card__date">8 Апреля 2023 г.</span>
+            </a>
+            <!-- /.main-display__news-item -->
+            <a href="#" class="main-display__card news-card">
+              <div class="news-card__wrapper"></div>
+              <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+              <h2 class="news-card__title">Обновление игрового мода</h2>
+              <span class="news-card__date">8 Апреля 2023 г.</span>
+            </a>
+            <!-- /.main-display__news-item -->
+            <a href="#" class="main-display__card news-card">
+              <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+              <h2 class="news-card__title">Обновление игрового мода</h2>
+              <span class="news-card__date">8 Апреля 2023 г.</span>
+            </a>
+            <!-- /.main-display__news-item -->
+          </div>
+          <!-- /.main-display__row -->
+          <h2 class="main-display__title">Выбор персонажа</h2>
+          <select class="main-display__select-origin" name="character" id="character-select-origin" hidden>
+            <option class="main-display__select-options" value="Выберите персонажа" selected disabled>Выберите персонажа</option>
+            <option class="main-display__select-options" value="Arvid Sandberg">Arvid Sandberg</option>
+            <option class="main-display__select-options" value="Hannes Van Dohl">Hannes Van Dohl</option>
+            <option class="main-display__select-options" value="Jessica Marshall">Jessica Marshall</option>
+          </select>
+          <div class="main-display__select-custom">
+            <a href="#" class="main-display__select-box placeholder">Выберите персонажа</a>
+            <div class="main-display__select-content hidden dnone">
+              <h2 class="main-display__select-title">Список персонажей</h2>
+              <ul class="main-display__select-list">
+                <li class="main-display__select-item">
+                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
+                  <div class="main-display__select-info">
+                    <span class="main-display__select-name">Arvid Sandberg</span>
+                    <span class="main-display__select-status">Одобрен</span>
+                  </div>
+                </li>
+                <li class="main-display__select-item">
+                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
+                  <div class="main-display__select-info">
+                    <span class="main-display__select-name">Hannes Van Dohl</span>
+                    <span class="main-display__select-status">Мёртв</span>
+                  </div>
+                </li>
+                <li class="main-display__select-item">
+                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
+                  <div class="main-display__select-info">
+                    <span class="main-display__select-name">Jessica Marshall</span>
+                    <span class="main-display__select-status">Заблокирован до 24.04.2030</span>
+                  </div>
+                </li>
+              </ul>
+              <a href="#" class="main-display__select-button">Создать персонажа</a>
+            </div>
+            <!-- /.main-display__select-content -->
+          </div>
+          <!-- /.main-display__select-custom -->
+          <a href="#" class="button main-display__button button--primary">Начать играть</a>
+          <h2 class="main-display__title">Наши социальные сети</h2>
+          <div class="main-display__social">
+            <a href="#" class="main-display__link-social main-display__link-social--vk">Группа ВК</a>
+            <a href="#" class="main-display__link-social main-display__link-social--discord">Дискорд</a>
+          </div>
+          <!-- /.main-display__social -->
+        </div>
+        <!-- /.container -->
+      </div>
+      <!-- /.main-content -->
+      <div class="news-content hidden dnone">
+        <div class="container">
+          <h1 class="main-display__title">Новости</h1>
+          <a href="#" class="main-display__card news-card">
+            <div class="news-card__wrapper"></div>
+            <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+            <h2 class="news-card__title">Обновление игрового мода</h2>
+            <span class="news-card__date">8 Апреля 2023 г.</span>
+          </a>
+          <!-- /.main-display__news-item -->
+          <a href="#" class="main-display__card news-card">
+            <div class="news-card__wrapper"></div>
+            <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+            <h2 class="news-card__title">Обновление игрового мода</h2>
+            <span class="news-card__date">8 Апреля 2023 г.</span>
+          </a>
+          <!-- /.main-display__news-item -->
+          <a href="#" class="main-display__card news-card">
+            <div class="news-card__wrapper"></div>
+            <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+            <h2 class="news-card__title">Обновление игрового мода</h2>
+            <span class="news-card__date">8 Апреля 2023 г.</span>
+          </a>
+          <!-- /.main-display__news-item -->
+          <a href="#" class="main-display__card news-card">
+            <div class="news-card__wrapper"></div>
+            <img class="news-card__image" src="./images/news-background.png" alt="News Background">
+            <h2 class="news-card__title">Обновление игрового мода</h2>
+            <span class="news-card__date">8 Апреля 2023 г.</span>
+          </a>
+          <!-- /.main-display__news-item -->
+        </div>
+        <!-- /.container -->
+      </div>
+      <!-- /.news-content -->
+      <div class="settings-content hidden dnone">
+        <div class="container">
+          <h1 class="main-display__title">Настройки</h1>
+        </div>
+        <!-- /.container -->
+      </div>
+      <!-- /.settings-content -->
+      <div class="tabs">
+        <a href="#" class="tabs__item tabs__item--main tabs__item--active">
+          <svg class="tabs__icon" width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 19H3C2.44772 19 2 18.5523 2 18V9.99998H0L9.292 0.706983C9.47957 0.519206 9.73409 0.413696 9.9995 0.413696C10.2649 0.413696 10.5194 0.519206 10.707 0.706983L20 9.99998H18V18C18 18.5523 17.5523 19 17 19ZM8 12H12V17H16V8.82798L10 2.82798L4 8.82798V17H8V12Z" fill="#888888"/>
+          </svg>            
+          Главная
+        </a>
+        <a href="#" class="tabs__item tabs__item--news">
+          <svg class="tabs__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.05135 14.8285L5.70486 15.1778C6.71761 15.7193 7.8486 16.0017 8.99699 16L9.00001 16C12.8661 16 16 12.8661 16 9C16 5.13387 12.8661 2 9.00001 2C5.13388 2 2.00001 5.13387 2.00001 9V9.00301C1.99828 10.1514 2.28073 11.2824 2.82217 12.2951L3.17155 12.9486L2.63433 15.3657L5.05135 14.8285ZM1.01578e-05 18L1.05841 13.2381C0.361389 11.9343 -0.00221566 10.4784 1.01578e-05 9C1.01578e-05 4.0293 4.02931 0 9.00001 0C13.9707 0 18 4.0293 18 9C18 13.9707 13.9707 18 9.00001 18C7.52162 18.0022 6.06566 17.6386 4.76191 16.9416L1.01578e-05 18Z" fill="#888888"/>
+          </svg>            
+          Новости
+        </a>
+        <a href="#" class="tabs__item tabs__item--settings">
+          <svg class="tabs__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.82 20H8.17998C7.71009 20 7.30353 19.673 7.20298 19.214L6.79598 17.33C6.25303 17.0921 5.7382 16.7946 5.26098 16.443L3.42398 17.028C2.97598 17.1709 2.48897 16.9823 2.25398 16.575L0.429979 13.424C0.197567 13.0165 0.277638 12.5025 0.622979 12.185L2.04798 10.885C1.98318 10.2961 1.98318 9.70189 2.04798 9.113L0.622979 7.816C0.277129 7.49837 0.197027 6.98372 0.429979 6.576L2.24998 3.423C2.48497 3.0157 2.97198 2.82714 3.41998 2.97L5.25698 3.555C5.50104 3.37416 5.75511 3.20722 6.01798 3.055C6.27032 2.91269 6.53002 2.78385 6.79598 2.669L7.20398 0.787C7.30405 0.327969 7.71017 0.000494393 8.17998 0H11.82C12.2898 0.000494393 12.6959 0.327969 12.796 0.787L13.208 2.67C13.4888 2.79352 13.7622 2.93308 14.027 3.088C14.2739 3.23081 14.5126 3.38739 14.742 3.557L16.58 2.972C17.0277 2.82967 17.5141 3.01816 17.749 3.425L19.569 6.578C19.8014 6.98548 19.7213 7.49951 19.376 7.817L17.951 9.117C18.0158 9.70589 18.0158 10.3001 17.951 10.889L19.376 12.189C19.7213 12.5065 19.8014 13.0205 19.569 13.428L17.749 16.581C17.5141 16.9878 17.0277 17.1763 16.58 17.034L14.742 16.449C14.5094 16.6203 14.2677 16.7789 14.018 16.924C13.7558 17.0759 13.4854 17.2131 13.208 17.335L12.796 19.214C12.6955 19.6726 12.2895 19.9996 11.82 20ZM5.61998 14.229L6.43998 14.829C6.62483 14.9652 6.81749 15.0904 7.01698 15.204C7.20468 15.3127 7.39795 15.4115 7.59598 15.5L8.52898 15.909L8.98598 18H11.016L11.473 15.908L12.406 15.499C12.8133 15.3194 13.1999 15.0961 13.559 14.833L14.38 14.233L16.421 14.883L17.436 13.125L15.853 11.682L15.965 10.67C16.0142 10.2274 16.0142 9.78064 15.965 9.338L15.853 8.326L17.437 6.88L16.421 5.121L14.38 5.771L13.559 5.171C13.1998 4.90671 12.8132 4.68175 12.406 4.5L11.473 4.091L11.016 2H8.98598L8.52698 4.092L7.59598 4.5C7.39779 4.58704 7.2045 4.68486 7.01698 4.793C6.81872 4.90633 6.62707 5.03086 6.44298 5.166L5.62198 5.766L3.58198 5.116L2.56498 6.88L4.14798 8.321L4.03598 9.334C3.98678 9.77664 3.98678 10.2234 4.03598 10.666L4.14798 11.678L2.56498 13.121L3.57998 14.879L5.61998 14.229ZM9.99598 14C7.78684 14 5.99598 12.2091 5.99598 10C5.99598 7.79086 7.78684 6 9.99598 6C12.2051 6 13.996 7.79086 13.996 10C13.9932 12.208 12.204 13.9972 9.99598 14ZM9.99598 8C8.90337 8.00111 8.01387 8.87885 7.99821 9.97134C7.98255 11.0638 8.84654 11.9667 9.93867 11.9991C11.0308 12.0315 11.9468 11.1815 11.996 10.09V10.49V10C11.996 8.89543 11.1005 8 9.99598 8Z" fill="#888888"/>
+          </svg>            
+          Настройки
+        </a>
+      </div>
+      <!-- /.tabs -->
+    </div>
+    <!-- /.main-display -->
+    </div>
+  </div>
+  <!-- /.root -->
+  <script src="./js/main.js"></script>
+</body>
+</html>

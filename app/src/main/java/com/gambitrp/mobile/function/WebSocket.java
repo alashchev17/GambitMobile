@@ -6,6 +6,9 @@ import java.util.Map;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * This example demonstrates how to create a websocket connection to a server. Only the most
@@ -27,13 +30,44 @@ public class WebSocket extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        send("Hello, it is me. Mario :)");
+        send("ping");
         System.out.println("----------------------opened connection");
-        // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
     }
 
     @Override
-    public void onMessage(String message) {
+    public void onMessage(String message)  {
+        JSONParser parser = new JSONParser();
+        Object obj;
+        try {
+           obj = parser.parse(message);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        JSONObject jsonObj = (JSONObject) obj;
+        JSONObject  data = (JSONObject) jsonObj.get("data");
+        switch(jsonObj.get("type").toString()) {
+            case "AUTH":
+                if (data.get("error") != null) {
+                    switch(data.get("error").toString()) {
+                        case "101":
+                            break;
+                        case "102":
+                            break;
+                        case "103":
+                            break;
+                        case "104":
+                            break;
+                        case "105":
+                            break;
+                    }
+                    return;
+                }
+                if(data.get("token") == "") {
+                    //Двухфакторка
+                }
+                //Пройдено
+                break;
+        }
         System.out.println("-------------received: " + message);
     }
 

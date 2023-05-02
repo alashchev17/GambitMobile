@@ -16,11 +16,10 @@ import java.net.URISyntaxException;
 
 import com.gambitrp.mobile.function.WebSocket;
 
+import org.json.simple.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
-
-
-
     private WebView client;
     private WebSocket ws;
 
@@ -29,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         client =(WebView) findViewById(R.id.webview);
-        client.setWebViewClient(new WebViewClient());
         WebSettings webSettings=client.getSettings();
         webSettings.setJavaScriptEnabled(true);
         client.setWebViewClient(new WebClient());
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         client.addJavascriptInterface(new JavaScriptInterface(this), "javafunc");
         try {
             ws = new WebSocket(new URI(
-                    "ws://localhost:4327/launcher"));
+                    "ws://45.90.219.11:4327/launcher"));
             ws.connect();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -77,8 +75,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public boolean testFunc(String test) {
-            System.out.println(test);
+        public boolean auth(String login, String password, Integer code) {
+            if(login == null || password == null) {
+                return false;
+            }
+           JSONObject data = new JSONObject();
+           data.put("login", login);
+           data.put("password", password);
+           if(code != null) {
+               data.put("code", code);
+           }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", "AUTH");
+            jsonObject.put("data", data);
+            ws.send(jsonObject.toJSONString());
+            System.out.println();
             return true;
         }
     }

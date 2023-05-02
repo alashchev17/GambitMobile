@@ -1,0 +1,63 @@
+.loading-display
+  opacity: 0
+  visibility: hidden
+  padding: 47px 66px 34px 66px
+  height: 100vh
+  background-color: $second-accent-color
+  position: relative
+  transition: all 0.3s
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  &--dnone
+    display: none
+  &--active
+    opacity: 1
+    visibility: visible
+  &--hidden
+    opacity: 0
+    visibility: hidden
+  &__logo
+    width: 104px
+    height: auto
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+  &__info
+    display: flex
+    flex-direction: column
+    align-items: center
+  &__title
+    color: $white
+    font-weight: 500
+    font-size: 17px
+    line-height: 241%
+    letter-spacing: -0.408px
+    margin-bottom: 6px
+  &__bar
+    width: 100%
+    display: inline-block
+    height: 5px
+    border-radius: 10px
+    margin-bottom: 13px
+    overflow: hidden
+    position: relative
+  &__gradient
+    position: absolute
+    top: 0
+    left: 0
+    display: inline-block
+    width: 100%
+    height: 100%
+    background: linear-gradient(270deg, $first-accent-color 0%, rgba(14, 63, 238, 0) 100%)
+    animation: gradient 5s infinite linear // 10s - скорость анимации
+    background-size: 100%
+    border-radius: 10px
+  &__status
+    font-weight: 500
+    font-size: 13px
+    line-height: 14px
+    color: $gray
+  &__speed
+    color: $white
