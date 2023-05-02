@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import com.gambitrp.mobile.function.WebSocket;
 
@@ -79,12 +82,19 @@ public class MainActivity extends AppCompatActivity {
             if(login == null || password == null) {
                 return false;
             }
-           JSONObject data = new JSONObject();
-           data.put("login", login);
-           data.put("password", password);
-           if(code != null) {
-               data.put("code", code);
-           }
+            MessageDigest digest;
+            try {
+               digest = MessageDigest.getInstance("SHA-256");
+            } catch(NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            JSONObject data = new JSONObject();
+            data.put("login", login);
+            data.put("password", hash);
+            if(code != null) {
+                data.put("code", code);
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", "AUTH");
             jsonObject.put("data", data);
