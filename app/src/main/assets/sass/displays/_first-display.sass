@@ -1,4 +1,6 @@
 .first-display
+  opacity: 0
+  visibility: hidden
   padding: 47px 0 34px 0
   height: 100vh
   background-color: $first-accent-color
@@ -7,11 +9,14 @@
   align-items: center
   justify-content: center
   transition: all 0.3s
-  &__logo
-    width: 104px
-    height: auto
+  &--dnone
+    display: none
+  &--active
+    opacity: 1
+    visibility: visible
   &--hidden
     opacity: 0
     visibility: hidden
-  &--dnone
-    display: none
+  &__logo
+    width: 104px
+    height: auto

@@ -2,7 +2,7 @@
   opacity: 0
   visibility: hidden
   padding: 74px 20px 34px 20px
-  height: 100%
+  height: 100vh
   background-color: $second-accent-color
   position: relative
   transition: all 0.3s
@@ -23,8 +23,11 @@
     align-items: center
     margin-bottom: 35px
     width: 100%
+    position: relative
   &__logo
-    margin-left: 95px
+    position: absolute
+    left: 50%
+    transform: translateX(-50%)
     width: 36px
     height: auto
   &__return
@@ -50,7 +53,7 @@
   &__title
     color: $white
     font-weight: 700
-    font-size: 33px
+    font-size: 32px
     line-height: 121%
     letter-spacing: -0.408px
     margin-bottom: 12px
@@ -58,7 +61,7 @@
     text-align: center
     color: $gray
     font-weight: 400
-    font-size: 15px
+    font-size: 14px
     line-height: 129%
     letter-spacing: -0.408px
     margin-bottom: 65px
@@ -79,15 +82,23 @@
     line-height: 171%
     letter-spacing: -0.408px
     border-radius: 10px
-    transition: border 0.3s
+    transition: all 0.3s
     &:not(:empty)
       border: 1px solid #282828
     &:focus
       border: 1px solid $gray
+    &:disabled
+      color: $gray
     &--error
       border: 1px solid $error-accent-color
       &:focus
         border: 1px solid $error-accent-color
+    &--access
+      border: 1px solid $access-accent-color
+      &:disabled
+        color: $white
+      &:focus
+        border: 1px solid $access-accent-color
   &__error
     display: inline-block
     margin-top: 13px
@@ -104,15 +115,32 @@
       opacity: 1
       visibility: visible
       transform: translateY(0)
-    &::before
-      content: ''
-      position: absolute
-      left: 0
-      top: 50%
-      transform: translateY(-50%)
-      width: 24px
-      height: 24px
-      background-image: url("../images/icons/error.svg")
-      background-repeat: no-repeat
-      background-position: center center
-      background-size: 20px 20px
+      &::before
+        content: ''
+        position: absolute
+        left: 0
+        top: 50%
+        transform: translateY(-50%)
+        width: 24px
+        height: 24px
+        background-image: url("../images/icons/error.svg")
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 20px 20px
+    &--access
+      opacity: 1
+      visibility: visible
+      transform: translateY(0)
+      color: $access-accent-color
+      &::before
+        content: ''
+        position: absolute
+        left: 0
+        top: 50%
+        transform: translateY(-50%)
+        width: 24px
+        height: 24px
+        background-image: url("../images/icons/access.svg")
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 11.15px 8.57px

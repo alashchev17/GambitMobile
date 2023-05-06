@@ -2,6 +2,7 @@
   opacity: 0
   visibility: hidden
   height: 100%
+  min-height: 100vh
   background-color: $second-accent-color
   position: relative
   max-width: 100%
@@ -12,7 +13,7 @@
   overflow-y: auto
   overflow-x: hidden
   .container
-    padding: 67px 20px 120px 20px
+    padding: 30px 20px 100px 20px
   &--dnone
     display: none
   &--hidden
@@ -35,12 +36,13 @@
       justify-content: space-between
     &.g-8
       gap: 8px
+    &.overflow-x-auto
+      overflow-x: auto
     &:nth-child(1)
       margin-bottom: 2px
     &:nth-child(2),
     &:nth-child(3)
       margin-bottom: 17px
-    
   &__notification
     display: inline-block
     width: 24px
@@ -53,7 +55,7 @@
       background-image: url("../images/icons/notification--active.svg")
   &__status
     font-weight: 400
-    font-size: 16px
+    font-size: 15px
     line-height: 19px
     letter-spacing: -0.24px
     display: flex
@@ -262,3 +264,63 @@
       background-repeat: no-repeat
       background-position: center center
       background-size: cover
+.notification
+  &-content
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background-color: $second-accent-color
+    z-index: 1000
+    transition: all 0.3s
+    &--active
+      opacity: 1
+      visibility: visible
+    &--hidden
+      opacity: 0
+      visibility: hidden
+    &--dnone
+      display: none
+    &__row
+      display: flex
+      align-items: center
+      justify-content: space-between
+      margin-bottom: 18px
+    &__title
+      font-weight: 600
+      font-size: 19px
+      line-height: 216%
+      letter-spacing: -0.408px
+      color: $white
+      justify-self: center
+    &__link
+      font-weight: 400
+      font-size: 17px
+      line-height: 129%
+      letter-spacing: -0.408px
+      color: #6D6D6D
+      position: relative
+      transition: color 0.3s
+      &--close
+        color: $first-accent-color
+        padding-left: 16px
+        &::before
+          content: ''
+          position: absolute
+          left: 0
+          top: 50%
+          transform: translateY(-50%)
+          background-image: url("../images/icons/return.svg")
+          background-repeat: no-repeat
+          background-position: center center
+          background-size: cover
+          width: 11px
+          height: 19px
+      &--active
+        color: $first-accent-color
+    &__cards
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      gap: 13px
