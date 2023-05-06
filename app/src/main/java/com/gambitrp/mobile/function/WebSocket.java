@@ -1,5 +1,10 @@
 package com.gambitrp.mobile.function;
 
+import android.os.Build;
+
+import com.gambitrp.mobile.MainActivity;
+
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -9,13 +14,15 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.ParseException;
 
 /**
  * This example demonstrates how to create a websocket connection to a server. Only the most
  * important callbacks are overloaded.
  */
 public class WebSocket extends WebSocketClient {
-
     public WebSocket(URI serverUri, Draft draft) {
         super(serverUri, draft);
     }
@@ -34,8 +41,23 @@ public class WebSocket extends WebSocketClient {
         System.out.println("----------------------opened connection");
     }
 
+    private String getErrorMessage(int err) {
+    Map<Integer, String> errorMessages = Map.of(
+        101, "Произошла ошибка данных. Повторите попытку",
+        102, "Произошла ошибка данных. Повторите попытку",
+        103, "Введёный ник не найден.",
+        104, "Неверный пароль",
+        105, "Неверный код двухфакторной аунтификации"
+    );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return errorMessages.getOrDefault(err, "");
+        }
+        return null;
+    }
+
     @Override
     public void onMessage(String message)  {
+        System.out.println("-------------received: " + message);
         JSONParser parser = new JSONParser();
         Object obj;
         try {
@@ -48,27 +70,33 @@ public class WebSocket extends WebSocketClient {
         switch(jsonObj.get("type").toString()) {
             case "AUTH":
                 if (data.get("error") != null) {
-                    switch(data.get("error").toString()) {
-                        case "101":
-                            break;
-                        case "102":
-                            break;
-                        case "103":
-                            break;
-                        case "104":
-                            break;
-                        case "105":
-                            break;
-                    }
+                    String error = "";
+                    int err = Integer.parseInt(data.get("error").toString());
+                    error = getErrorMessage(err);
+                    JSONObject response = new JSONObject();
+                    response.put("type", "auth");
+                    response.put("error_message", error);
+                    response.put("error", err);
+                    MainActivity.JavaScriptCall("v.error", response.toJSONString());
                     return;
                 }
                 if(data.get("token") == "") {
-                    //Двухфакторка
+                    JSONObject response = new JSONObject();
+                    response.put("type", "auth");
+                    response.put("page", "google");
+                    MainActivity.JavaScriptCall("v.confirm", response.toJSONString());
+                    return;
                 }
-                //Пройдено
+                JSONObject response = new JSONObject();
+                response.put("type", "auth");
+                response.put("page", "main");
+                response.put("characters", data.get("characters"));
+                response.put("login", data.get("login"));
+                MainActivity.JavaScriptCall("v.confirm", response.toJSONString());
+                MainActivity.Token = data.get("token").toString();
+
                 break;
         }
-        System.out.println("-------------received: " + message);
     }
 
     @Override

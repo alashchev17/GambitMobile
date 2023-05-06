@@ -1,5 +1,6 @@
 package com.gambitrp.mobile;
 
+//import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,18 +14,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+//import java.nio.charset.StandardCharsets;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+//import java.security.NoSuchAlgorithmException;
 
 import com.gambitrp.mobile.function.WebSocket;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.simple.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
-    private WebView client;
+    private static WebView client;
     private WebSocket ws;
+
+    public static String Token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         client.setWebViewClient(new WebClient());
         client.setWebChromeClient(new ChromeClient());
         client.loadUrl("file:///android_asset/index.html");
-        client.addJavascriptInterface(new JavaScriptInterface(this), "javafunc");
+        client.addJavascriptInterface(new JavaScriptInterface(this), "Java");
         try {
             ws = new WebSocket(new URI(
                     "ws://45.90.219.11:4327/launcher"));
@@ -44,8 +51,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+
     }
-    public class WebClient extends WebViewClient{
+
+    public static void JavaScriptCall(String call, String params) {
+        String b = "javascript"+call;
+        if(!Objects.equals(params, "")) b += "('"+params + "')";
+        client.loadUrl(b);
+    }
+    public static class WebClient extends WebViewClient{
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon){
@@ -66,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-    public class ChromeClient extends WebChromeClient {
+    public static class ChromeClient extends WebChromeClient {
         //Обработка событий JS
     }
 
@@ -78,17 +92,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public boolean auth(String login, String password, Integer code) {
+        public void Auth(String login, String password,Integer code) {
+            System.out.println("--------Auth func");
             if(login == null || password == null) {
-                return false;
+                return;
             }
-            MessageDigest digest;
-            try {
-               digest = MessageDigest.getInstance("SHA-256");
-            } catch(NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            String hash = DigestUtils.sha256Hex(password);
             JSONObject data = new JSONObject();
             data.put("login", login);
             data.put("password", hash);
@@ -99,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
             jsonObject.put("type", "AUTH");
             jsonObject.put("data", data);
             ws.send(jsonObject.toJSONString());
-            System.out.println();
-            return true;
+            System.out.println("--------Send "+jsonObject.toJSONString());
         }
     }
 }

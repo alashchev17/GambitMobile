@@ -1,3 +1,4 @@
+
 // Initializing Displays
 const firstDisplay = document.querySelector(".first-display");
 const loadingDisplay = document.querySelector(".loading-display");
@@ -92,6 +93,7 @@ introDisplayButton.addEventListener("click", e => {
 });
 
 authCheckbox.addEventListener("click", () => {
+Java.Auth("Volk", "123123", 0);
   if (authCheckbox.classList.contains("checkbox__label--active")) {
     authCheckbox.classList.remove("checkbox__label--active");
     authCheckboxOrigin.checked = false;
