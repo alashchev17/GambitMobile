@@ -4,15 +4,18 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 import com.gambitrp.mobile.browser.ChromeClient;
-import com.gambitrp.mobile.browser.interfaces.JavaScriptInterface;
 import com.gambitrp.mobile.browser.WebClient;
+import com.gambitrp.mobile.browser.interfaces.JavaScriptInterface;
+import com.gambitrp.mobile.core.Logger;
 import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.network.WebSocket;
-import com.gambitrp.mobile.network.packets.Packet;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Window.getInstance().setActivity(this);
+        Logger.getInstance();
+
         setContentView(R.layout.activity_main);
 
         webView = (WebView) findViewById(R.id.webview);
