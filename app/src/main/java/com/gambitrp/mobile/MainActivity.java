@@ -10,7 +10,9 @@ import java.net.URISyntaxException;
 import com.gambitrp.mobile.browser.ChromeClient;
 import com.gambitrp.mobile.browser.interfaces.JavaScriptInterface;
 import com.gambitrp.mobile.browser.WebClient;
+import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.network.WebSocket;
+import com.gambitrp.mobile.network.packets.Packet;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Window.getInstance().setActivity(this);
         setContentView(R.layout.activity_main);
 
         webView = (WebView) findViewById(R.id.webview);
@@ -42,5 +45,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public WebView getWebView() {
+        return webView;
+    }
+
+    public WebSocket getWebSocket() {
+        return webSocket;
     }
 }
