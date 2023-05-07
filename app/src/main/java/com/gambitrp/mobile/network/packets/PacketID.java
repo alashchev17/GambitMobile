@@ -22,9 +22,7 @@ public enum PacketID {
     }
 
     public static PacketID valueOf(int id) {
-        Object packet = map.get(id);
-
-        return packet != null ? (PacketID) packet : null;
+        return map.get(id);
     }
 
     public int getValue() {
