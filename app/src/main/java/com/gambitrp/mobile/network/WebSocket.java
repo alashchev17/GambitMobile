@@ -1,45 +1,34 @@
 package com.gambitrp.mobile.network;
 
-import com.gambitrp.mobile.network.packets.AuthPacket;
-import com.gambitrp.mobile.network.packets.Packet;
+import com.gambitrp.mobile.network.packets.PacketID;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WebSocket extends WebSocketClient {
-    private final Map<PacketsID, Packet> packetsMap = new HashMap<>();
-
-    public enum PacketsID {
-        NULL,
-        AUTH
-    }
-
     public WebSocket(URI serverURI) {
         super(serverURI);
-
-        packetsMap.put(PacketsID.AUTH, new AuthPacket());
     }
 
     @Override
     public void onOpen(ServerHandshake handshake) {
         System.out.println("[CLIENT] open connection socket");
+
         send("{\"type\": 1, \"data\": {\"login\": \"Volk\", \"password\": \"123123\"}}");
     }
 
     @Override
     public void onMessage(String message) {
         System.out.println("[CLIENT] socket message: " + message);
+
         JSONParser jsonParser = new JSONParser();
         Object object;
-        PacketsID packet;
+        PacketID packet;
 
         try {
             object = jsonParser.parse(message);
@@ -48,19 +37,26 @@ public class WebSocket extends WebSocketClient {
         }
 
         JSONObject jsonObject = (JSONObject) object;
+        if (jsonObject == null) return;
 
-        packet = PacketsID.values()[Integer.parseInt(jsonObject.get("type").toString())]; // Говно, нужно будет красивее сделать :D
+        Long id = (Long) jsonObject.get("type");
+        if (id == null) return;
 
-        if (packetsMap.containsKey(packet)) {
+        packet = PacketID.valueOf(id.intValue());
+
+        if (packet != null) {
             JSONObject data;
 
             data = (JSONObject) jsonObject.get("response");
+            if (data == null) return;
 
             if(data.get("error") != null) {
-                packetsMap.get(packet).Error(data);
+                packet.getPacket().error(data);
+
                 return;
             }
-            packetsMap.get(packet).Response(data);
+
+            packet.getPacket().response(data);
         }
     }
 

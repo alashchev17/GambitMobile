@@ -5,17 +5,18 @@ import org.json.simple.JSONObject;
 
 public class AuthPacket implements Packet {
     @Override
-    public void Response(JSONObject data) {
+    public void response(JSONObject data) {
         if(data.get("token") == "") {
-            System.out.println("2FA");
+            System.out.println("[CLIENT] 2FA");
             //Отправка JS на двухфакторную аунтификацию
             return;
         }
         //Пройдена аунтификация, передаём JS все нужные параметры и переводим на главную страницу
-
+        System.out.println("[CLIENT] test");
     }
 
-    public void Error(JSONObject data) {
-        System.out.println(data.get("error_message"));;
+    @Override
+    public void error(JSONObject data) {
+        System.out.println("[CLIENT] " + data.get("error_message"));;
     }
 }

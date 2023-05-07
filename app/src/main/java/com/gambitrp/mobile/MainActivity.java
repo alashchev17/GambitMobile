@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        webView = (WebView)findViewById(R.id.webview);
+        webView = (WebView) findViewById(R.id.webview);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.loadUrl("file:///android_asset/index.html");
 
-        webView.addJavascriptInterface(new JavaScriptInterface(this), "Gambit");
+        webView.addJavascriptInterface(new JavaScriptInterface(this), "Launcher");
 
         try {
             webSocket = new WebSocket(new URI("ws://45.90.219.11:4327/launcher"));
