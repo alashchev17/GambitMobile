@@ -1,10 +1,6 @@
 package com.gambitrp.mobile.core;
 
 import com.gambitrp.mobile.MainActivity;
-import com.gambitrp.mobile.network.packets.PacketID;
-
-import java.util.Arrays;
-import java.util.StringJoiner;
 
 public class Window {
     private static Window instance = null;
@@ -38,7 +34,7 @@ public class Window {
                     case "Integer":
                     case "Boolean": call.append(object);
                         break;
-                    case "String": call.append("'" + object + "'");
+                    case "String": call.append("'").append(object).append("'");
                         break;
                 }
 
