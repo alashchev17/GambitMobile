@@ -2,17 +2,20 @@ package com.gambitrp.mobile.network.packets;
 
 import org.json.JSONException;
 import org.json.simple.JSONObject;
+import com.gambitrp.mobile.core.Window;
 
 public class AuthPacket implements Packet {
     @Override
     public void response(JSONObject data) {
+        int type;
         if(data.get("token") == "") {
-            System.out.println("[CLIENT] 2FA");
-            //Отправка JS на двухфакторную аунтификацию
-            return;
+            data.clear();
+            type = 1;
+        } else {
+            data.remove("token");
+            type = 2;
         }
-        //Пройдена аунтификация, передаём JS все нужные параметры и переводим на главную страницу
-        System.out.println("[CLIENT] test");
+        Window.getInstance().javaScriptCall("v.xz", type, data.toJSONString()); // Изменю функцию потом
     }
 
     @Override
