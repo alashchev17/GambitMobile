@@ -1,21 +1,21 @@
 package com.gambitrp.mobile.network.data;
 
+import java.util.UUID;
+
 public class Session {
     private static Session instance = null;
 
-    private String token;
-
-    public String getToken() {
-        return token;
-    }
+    private UUID token;
 
     private Session()
     {
     }
 
-    public void setToken(String token) {
-        if (token == null) token = "";
+    public String getToken() {
+        return token != null ? token.toString() : "";
+    }
 
+    public void setToken(UUID token) {
         this.token = token;
     }
 

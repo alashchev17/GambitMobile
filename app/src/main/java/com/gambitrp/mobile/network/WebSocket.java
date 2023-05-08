@@ -1,7 +1,5 @@
 package com.gambitrp.mobile.network;
 
-import com.gambitrp.mobile.browser.interfaces.JavaScript;
-import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.network.packets.PacketError;
 import com.gambitrp.mobile.network.packets.PacketID;
 
