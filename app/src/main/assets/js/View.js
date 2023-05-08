@@ -87,8 +87,10 @@ class View {
     });
     selectors.authButton.addEventListener("click", event => {
       event.preventDefault();
-      this.display = "google";
-    });
+      let auth = document.getElementsByClassName("auth-display__input");
+      let check = selectors.authCheckboxOrigin;
+      Launcher.auth(auth[0].value, auth[1].value, check.checked, 0)
+      });
     selectors.googleReturnButton.addEventListener("click", event => {
       event.preventDefault();
       this.display = "auth";

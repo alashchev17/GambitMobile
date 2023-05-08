@@ -26,11 +26,12 @@ public class AuthPacket implements Packet {
             type = typeAuthorized;
         }
 
-        Window.getInstance().javaScriptCall("v.xz", type, data.toJSONString());
+        Window.getInstance().javaScriptCall("v.launcherResponse", type, data.toJSONString());
     }
 
     @Override
     public void error(PacketError error) {
+        Window.getInstance().javaScriptCall("v.launcherError", error.getValue(), error.getDescription());
         System.out.println("[CLIENT] error: " + error);
     }
 }

@@ -15,7 +15,7 @@ public class JavaScript {
     }
 
     @JavascriptInterface
-    public void auth(String login, String password, Integer code) {
+    public void auth(String login, String password, Boolean save, Integer code) {
         if (login == null || password == null) return;
 
         Handler handler = PacketID.AUTH.getHandler();
