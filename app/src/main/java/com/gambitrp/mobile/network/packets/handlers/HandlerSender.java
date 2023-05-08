@@ -29,6 +29,7 @@ public class HandlerSender {
         webSocket.send(data.toJSONString());
 
         handler.packetSent();
+        handler.map.clear();
 
         System.out.println("[CLIENT] send: " + data);
     }
