@@ -73,4 +73,18 @@ class App extends View {
       console.log(selectors.authCheckboxOrigin.checked);
     });
   }
+
+  launcherResponse (type, data) {
+    switch(type) {
+        case 1:
+            this.display = "google";
+           break;
+        case 2:
+            this.display = "main";
+            break;
+    }
+  }
+  launcherError(id, error) {
+    alert(error);
+  }
 }

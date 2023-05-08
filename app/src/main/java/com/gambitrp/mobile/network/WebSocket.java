@@ -21,8 +21,6 @@ public class WebSocket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshake) {
         System.out.println("[CLIENT] onOpen");
-
-        new JavaScript(Window.getInstance().getActivity()).auth("testlc", "test123", 0);
     }
 
     @Override
