@@ -15,12 +15,13 @@ public class JavaScript {
     }
 
     @JavascriptInterface
-    public void auth(String login, String password, Integer code) {
+    public void auth(String login, String password, Boolean remember, Integer code) {
         if (login == null || password == null) return;
 
         Handler handler = PacketID.AUTH.getHandler();
         handler.setData("login", login);
         handler.setData("password", DigestUtils.sha256Hex(password));
+        handler.setData("save", remember);
         handler.setData("code", code);
         handler.send();
     }
