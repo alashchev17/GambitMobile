@@ -4,5 +4,5 @@ import org.json.simple.JSONObject;
 
 public interface Packet {
     void response(JSONObject data);
-    void error(JSONObject data);
+    void error(PacketError error);
 }

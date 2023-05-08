@@ -1,25 +1,38 @@
 package com.gambitrp.mobile.network.packets;
 
-import org.json.JSONException;
-import org.json.simple.JSONObject;
 import com.gambitrp.mobile.core.Window;
+import com.gambitrp.mobile.network.data.Session;
+
+import org.json.simple.JSONObject;
 
 public class AuthPacket implements Packet {
+    private final int typeTwoFactor = 1;
+    private final int typeAuthorized = 2;
+
     @Override
     public void response(JSONObject data) {
         int type;
-        if(data.get("token") == "") {
+        String token = (String) data.get("token");
+
+        Session.getInstance().setToken(token);
+
+        System.out.println("[CLIENT] token: " + token);
+
+        if (token == null || token.isEmpty()) {
             data.clear();
-            type = 1;
+
+            type = typeTwoFactor;
         } else {
             data.remove("token");
-            type = 2;
+
+            type = typeAuthorized;
         }
-        Window.getInstance().javaScriptCall("v.xz", type, data.toJSONString()); // Изменю функцию потом
+
+        Window.getInstance().javaScriptCall("v.xz", type, data.toJSONString());
     }
 
     @Override
-    public void error(JSONObject data) {
-        System.out.println("[CLIENT] " + data.get("error_message"));;
+    public void error(PacketError error) {
+        System.out.println("[CLIENT] description: " + error.getDescription());
     }
 }

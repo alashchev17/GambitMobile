@@ -43,6 +43,8 @@ public class Window {
             }
         }
 
+        System.out.println("[CLIENT] javaScriptCall: " + call);
+
         activity.getWebView().loadUrl(call.toString());
 
         return true;
