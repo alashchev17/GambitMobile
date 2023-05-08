@@ -16,8 +16,6 @@ public class AuthPacket implements Packet {
 
         Session.getInstance().setToken(token);
 
-        System.out.println("[CLIENT] token: " + token);
-
         if (token == null || token.isEmpty()) {
             data.clear();
 
@@ -33,6 +31,6 @@ public class AuthPacket implements Packet {
 
     @Override
     public void error(PacketError error) {
-        System.out.println("[CLIENT] description: " + error.getDescription());
+        System.out.println("[CLIENT] error: " + error);
     }
 }

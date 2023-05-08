@@ -20,16 +20,14 @@ public class WebSocket extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        System.out.println("[CLIENT] open connection socket");
-
-        //send("{\"type\": 1, \"data\": {\"login\": \"testlc\", \"password\": \"ecd71870d1963316a97e3ac3408c9835ad8cf0f3c1bc703527c30265534f75ae\"}}");
+        System.out.println("[CLIENT] onOpen");
 
         new JavaScript(Window.getInstance().getActivity()).auth("testlc", "test123", 0);
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("[CLIENT] socket message: " + message);
+        System.out.println("[CLIENT] onMessage: " + message);
 
         JSONParser jsonParser = new JSONParser();
         Object object;
@@ -69,10 +67,11 @@ public class WebSocket extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("[CLIENT] Close connection + " + code + ". Message: " + reason);
+        System.out.println("[CLIENT] onClose: " + reason);
     }
 
     @Override
     public void onError(Exception ex) {
+        System.out.println("[CLIENT] onError: " + ex);
     }
 }
