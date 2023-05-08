@@ -7,4 +7,9 @@ public class AuthHandler implements Handler {
     public PacketID getPacket() {
         return PacketID.AUTH;
     }
+
+    @Override
+    public void packetSent() {
+        System.out.println("[CLIENT] packetSent");
+    }
 }
