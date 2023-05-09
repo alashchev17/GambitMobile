@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Semaphore;
 
 public class Config<T> {
     private final String path = Window.getInstance().getActivity().getFilesDir().getAbsolutePath() + "/configs";
@@ -16,6 +17,8 @@ public class Config<T> {
     private final String pathFile;
 
     private final T data;
+
+    private final Semaphore semaphoreSave = new Semaphore(1);
 
     public Config(String name, Class<T> type) {
         File dir = new File(path);
@@ -67,5 +70,21 @@ public class Config<T> {
 
     public T getData() {
         return data;
+    }
+
+    public void saveData() {
+        new Thread(() -> {
+            try {
+                semaphoreSave.acquire();
+
+                FileOutputStream handle = new FileOutputStream(pathFile, false);
+                handle.write(new Gson().toJson(data).getBytes(StandardCharsets.UTF_8));
+                handle.close();
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                semaphoreSave.release();
+            }
+        }).start();
     }
 }

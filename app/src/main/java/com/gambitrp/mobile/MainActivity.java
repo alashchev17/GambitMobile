@@ -75,4 +75,8 @@ public class MainActivity extends AppCompatActivity {
     public WebSocket getWebSocket() {
         return webSocket;
     }
+
+    public Config<LauncherConfig> getConfig() {
+        return launcherConfig;
+    }
 }

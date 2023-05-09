@@ -24,7 +24,7 @@ public class HandlerSender {
         data.put("type", handler.getPacket().getValue());
         data.put("launcher", launcherType);
         data.put("data", new JSONObject(handler.getData()));
-        data.put("token", Session.getInstance().getToken());
+        data.put("token", Session.getInstance().getToken(Session.SessionType.SIGNATURE_TOKEN));
 
         webSocket.send(data.toJSONString());
 

@@ -5,8 +5,6 @@ import com.gambitrp.mobile.network.data.Session;
 
 import org.json.simple.JSONObject;
 
-import java.util.UUID;
-
 public class AuthPacket implements Packet {
     private final int typeTwoFactor = 1;
     private final int typeAuthorized = 2;
@@ -14,16 +12,21 @@ public class AuthPacket implements Packet {
     @Override
     public void response(JSONObject data) {
         int type;
-        UUID token = UUID.fromString((String) data.get("token"));
 
-        Session.getInstance().setToken(token);
+        String signatureToken = (String) data.get("token");
+        String authToken = (String) data.get("session_token");
 
-        if (token == null) {
+        Session.getInstance().setToken(Session.SessionType.SIGNATURE_TOKEN, signatureToken);
+        Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, authToken);
+
+        if (signatureToken == null || signatureToken.isBlank()) {
             data.clear();
 
             type = typeTwoFactor;
         } else {
+            data.remove("two_factor");
             data.remove("token");
+            data.remove("session_token");
 
             type = typeAuthorized;
         }

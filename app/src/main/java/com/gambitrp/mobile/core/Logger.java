@@ -39,7 +39,7 @@ public class Logger implements AutoCloseable {
         row.format(params);
 
         Date date = new Date();
-        String data = "[" + date + "] [" + type + "] " + format;
+        String data = "[" + date + "] [" + type + "] " + format + System.lineSeparator();
 
         try {
             handle.write(data.getBytes(StandardCharsets.UTF_8));
