@@ -60,8 +60,8 @@
             id="checkbox__input"
             name="checkbox"
           />
-          <label for="#" class="checkbox__label" id="checkbox__label"></label>
-          <span for="checkbox__input" class="auth-display__label" id="checkbox__span">Запомните меня</span>
+          <label for="checkbox__input" class="checkbox__label" id="checkbox__label"></label>
+          <span class="auth-display__label" id="checkbox__span">Запомните меня</span>
         </div>
         <!-- /.modal-checkbox -->
         <button class="button auth-display__button button--primary" type="submit">Войти в аккаунт</button>
@@ -138,37 +138,12 @@
           <h2 class="main-display__title">Выбор персонажа</h2>
           <select class="main-display__select-origin" name="character" id="character-select-origin" hidden>
             <option class="main-display__select-options" value="Выберите персонажа" selected disabled>Выберите персонажа</option>
-            <option class="main-display__select-options" value="Arvid Sandberg">Arvid Sandberg</option>
-            <option class="main-display__select-options" value="Hannes Van Dohl">Hannes Van Dohl</option>
-            <option class="main-display__select-options" value="Jessica Marshall">Jessica Marshall</option>
           </select>
           <div class="main-display__select-custom">
             <a href="#" class="main-display__select-box placeholder">Выберите персонажа</a>
             <div class="main-display__select-content hidden dnone">
               <h2 class="main-display__select-title">Список персонажей</h2>
-              <ul class="main-display__select-list">
-                <li class="main-display__select-item">
-                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
-                  <div class="main-display__select-info">
-                    <span class="main-display__select-name">Arvid Sandberg</span>
-                    <span class="main-display__select-status">Одобрен</span>
-                  </div>
-                </li>
-                <li class="main-display__select-item">
-                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
-                  <div class="main-display__select-info">
-                    <span class="main-display__select-name">Hannes Van Dohl</span>
-                    <span class="main-display__select-status">Мёртв</span>
-                  </div>
-                </li>
-                <li class="main-display__select-item">
-                  <img src="./images/character-image.png" alt="#" class="main-display__select-image">
-                  <div class="main-display__select-info">
-                    <span class="main-display__select-name">Jessica Marshall</span>
-                    <span class="main-display__select-status">Заблокирован до 24.04.2030</span>
-                  </div>
-                </li>
-              </ul>
+              <ul class="main-display__select-list"></ul>
               <a href="#" class="main-display__select-button">Создать персонажа</a>
             </div>
             <!-- /.main-display__select-content -->
@@ -291,12 +266,23 @@
     </div>
     <!-- /.main-display -->
     </div>
-  </div>
   <!-- /.root -->
   <script src="./js/View.js" type="text/javascript"></script>
   <script src="./js/App.js" type="text/javascript"></script>
   <script>
     v = new App();
+
+    function showHidePassword(target){
+      let input = document.querySelector('#password');
+      if (input.getAttribute('type') == 'password') {
+          target.classList.add('view');
+          input.setAttribute('type', 'text');
+      } else {
+          target.classList.remove('view');
+          input.setAttribute('type', 'password');
+      }
+      return false;
+    }
   </script>
 </body>
 </html>
