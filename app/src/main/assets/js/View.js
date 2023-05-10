@@ -16,11 +16,13 @@ class View {
     googleReturnButton: ".google-display__return",
     googleError: ".google-display__error",
     mainDisplay: ".main-display",
+    mainNickname: "#nickname",
     mainStatus: ".main-display__status",
     mainContent: ".main-content",
-    characterSelectOrigin: "#character-select-origin",
     characterSelectCustom: ".main-display__select-box",
     characterSelectContent: ".main-display__select-content",
+    characterSelectList: ".main-display__select-list",
+    startGameButton: ".main-display__button",
     notificationDisplay: ".notification-content",
     notificationOpen: ".main-display__notification",
     notificationClose: ".notification-content__link--close",
@@ -39,8 +41,10 @@ class View {
   access = "--access"
   displayName = undefined;
   googleCode = "";
+  auth = document.querySelectorAll(".auth-display__input");
   googleInputs = document.querySelectorAll(".google-display__input");
   newsCards = document.querySelectorAll(".main-display__card");
+  characterSelectOrigin = document.querySelector("#character-select-origin");
   characterSelectOriginOptions = document.querySelectorAll(".main-display__select-options");
   characterSelectItems = document.querySelectorAll(".main-display__select-item");
   characterSelectItemsArray = Array.prototype.slice.call(this.characterSelectItems);
@@ -59,7 +63,7 @@ class View {
     // events
     this.events(selectors);
     this.googleInputsHandler(selectors);
-    this.mainSelectHandler(selectors);
+//    this.mainSelectHandler(selectors);
     this.tabsHandler(selectors);
     this.notificationsHandler(selectors);
   }
@@ -87,10 +91,13 @@ class View {
     });
     selectors.authButton.addEventListener("click", event => {
       event.preventDefault();
-      let auth = document.getElementsByClassName("auth-display__input");
       let check = selectors.authCheckboxOrigin;
-      Launcher.auth(auth[0].value, auth[1].value, check.checked, 0)
-      });
+      if (!this.auth[0].value.trim() !== "" && !this.auth[1].value.trim() !== "") {
+        Launcher.auth(this.auth[0].value, this.auth[1].value, check.checked, 0);
+      } else {
+        // сделать логику ошибки
+      }
+    });
     selectors.googleReturnButton.addEventListener("click", event => {
       event.preventDefault();
       this.display = "auth";
@@ -122,6 +129,18 @@ class View {
       selectors.notificationClose.classList.remove(selectors.notificationClose.classList[0] + this.active);
       selectors.notificationOpen.classList.remove(selectors.notificationOpen.classList[0] + this.active);
     });
+    this.googleInputs[5].addEventListener("keyup", () => {
+      if (this.googleInputs[5].value !== "") {
+        for (let i = 0; i < this.googleInputs.length; i++) {
+          this.googleCode += this.googleInputs[i].value;
+          this.googleInputs[i].setAttribute("disabled", "disabled");
+        }
+        let googleCodeNumber = Number(this.googleCode);
+        console.warn(googleCodeNumber);
+        let check = selectors.authCheckboxOrigin;
+        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
+      }
+    });
   }
 
   googleInputsHandler(selectors) {
@@ -130,8 +149,8 @@ class View {
         if (this.googleInputs[i].classList.contains(this.googleInputs[i].classList[0] + this.error)) {
           for (let i = 0; i < this.googleInputs.length; i++) {
             this.googleInputs[i].classList.toggle(this.googleInputs[i].classList[0] + this.error);
-            selectors.googleError.classList.remove(selectors.googleError.classList[0] + this.active);
           }
+          selectors.googleError.classList.remove(selectors.googleError.classList[0] + this.active);
         }
         if (this.googleInputs[i].value !== "" && this.googleInputs[i].value !== " " && !isNaN(this.googleInputs[i].value)) {
           if (this.googleInputs[i] == this.googleInputs[5]) {
@@ -154,66 +173,7 @@ class View {
     }
   }
 
-  mainSelectHandler(selectors) {
-    selectors.characterSelectCustom.addEventListener("click", event => {
-      event.preventDefault();
-      if (this.characterSelectItemsArray.some(item => item.classList.contains("active"))) {
-        this.characterSelectItems.forEach(item => {
-          item.classList.remove("active");
-        });
-        this.characterSelectOriginOptions[0].setAttribute("selected", "selected");
-      }
-      setTimeout(() => {
-        selectors.characterSelectCustom.classList.toggle("active");
-        if (selectors.characterSelectCustom.classList.contains("active")) {
-          selectors.mainDisplayButton.classList.add("hidden");
-          selectors.mainDisplayButton.classList.remove("active");
-          setTimeout(() => {
-            setTimeout(() => {
-              selectors.characterSelectContent.classList.toggle("dnone");
-            }, 150)
-            selectors.characterSelectContent.classList.toggle("active");
-            selectors.characterSelectContent.classList.toggle("hidden");
-          }, 50);
-        } else {
-          selectors.characterSelectContent.classList.toggle("active");
-          selectors.characterSelectContent.classList.toggle("hidden");
-          setTimeout(() => {
-            selectors.mainDisplayButton.classList.add("active");
-            selectors.mainDisplayButton.classList.remove("hidden");
-            selectors.characterSelectContent.classList.toggle("dnone");
-          }, 300);
-        }
-      }, 150);
-    });
 
-    this.characterSelectItems.forEach((item, index) => {
-      item.addEventListener("click", () => {
-        this.characterSelectOriginOptions[index].removeAttribute("selected");
-        this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
-        if (this.characterSelectOriginOptions[index + 1].hasAttribute("selected")) {
-          this.characterSelectOriginOptions[index + 1].removeAttribute("selected");
-          this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
-        }
-        item.classList.toggle("active");
-        console.log(selectors.characterSelectOrigin.value);
-        selectors.characterSelectCustom.textContent = this.characterSelectName[index].textContent;
-        // прячем кастомный селект
-        setTimeout(() => {
-          selectors.characterSelectCustom.classList.remove("active");
-          selectors.characterSelectContent.classList.remove("active");
-          selectors.characterSelectContent.classList.add("hidden");
-          setTimeout(() => {
-            selectors.characterSelectContent.classList.add("dnone");
-            setTimeout(() => {
-              selectors.mainDisplayButton.classList.add("active");
-              selectors.mainDisplayButton.classList.remove("hidden");
-            }, 150);
-          }, 150);
-        }, 750);
-      });
-    });
-  }
   tabsHandler(selectors) {
     this.newsCards.forEach(item => {
       item.addEventListener("click", event => {
@@ -324,5 +284,80 @@ class View {
       selectors.notificationOpen.classList.add(selectors.notificationOpen.classList[0] + this.active);
       selectors.notificationRead.classList.add(selectors.notificationRead.classList[0] + this.active);
     }
+    this.notificationCardsArray.forEach(item => {
+      item.addEventListener("click", event => {
+        event.preventDefault();
+        item.classList.remove(item.classList[0] + this.active);
+        if (!this.notificationCardsArray.some(item => item.classList.contains(item.classList[0] + this.active))) {
+          selectors.notificationOpen.classList.remove(selectors.notificationOpen.classList[0] + this.active);
+          selectors.notificationRead.classList.remove(selectors.notificationRead.classList[0] + this.active);
+        }
+      });
+    });
   }
+  mainSelectHandler(selectors) {
+      selectors.characterSelectCustom.addEventListener("click", event => {
+        event.preventDefault();
+        if (this.characterSelectItemsArray.some(item => item.classList.contains("active"))) {
+          this.characterSelectItems.forEach(item => {
+            item.classList.remove("active");
+          });
+          this.characterSelectOriginOptions[0].setAttribute("selected", "selected");
+        }
+        setTimeout(() => {
+          selectors.characterSelectCustom.classList.toggle("active");
+          if (selectors.characterSelectCustom.classList.contains("active")) {
+            selectors.mainDisplayButton.classList.add("hidden");
+            selectors.mainDisplayButton.classList.remove("active");
+            setTimeout(() => {
+              setTimeout(() => {
+                selectors.characterSelectContent.classList.toggle("dnone");
+              }, 150)
+              selectors.characterSelectContent.classList.toggle("active");
+              selectors.characterSelectContent.classList.toggle("hidden");
+            }, 50);
+          } else {
+            selectors.characterSelectContent.classList.toggle("active");
+            selectors.characterSelectContent.classList.toggle("hidden");
+            setTimeout(() => {
+              selectors.mainDisplayButton.classList.add("active");
+              selectors.mainDisplayButton.classList.remove("hidden");
+              selectors.characterSelectContent.classList.toggle("dnone");
+            }, 300);
+          }
+        }, 150);
+      });
+
+      this.characterSelectItems.forEach((item, index) => {
+        item.addEventListener("click", () => {
+          if (item.getAttribute("data-game") == false) {
+            selectors.startGameButton.setAttribute("disabled", "disabled");
+          } else if (item.getAttribute("data-game") == true) {
+            selectors.startGameButton.removeAttribute("disabled");
+          }
+          this.characterSelectOriginOptions[index].removeAttribute("selected");
+          this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
+          if (this.characterSelectOriginOptions[index + 1].hasAttribute("selected")) {
+            this.characterSelectOriginOptions[index + 1].removeAttribute("selected");
+            this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
+          }
+          item.classList.toggle("active");
+          console.log(this.characterSelectOrigin.value);
+          selectors.characterSelectCustom.textContent = this.characterSelectName[index].textContent;
+          // прячем кастомный селект
+          setTimeout(() => {
+            selectors.characterSelectCustom.classList.remove("active");
+            selectors.characterSelectContent.classList.remove("active");
+            selectors.characterSelectContent.classList.add("hidden");
+            setTimeout(() => {
+              selectors.characterSelectContent.classList.add("dnone");
+              setTimeout(() => {
+                selectors.mainDisplayButton.classList.add("active");
+                selectors.mainDisplayButton.classList.remove("hidden");
+              }, 150);
+            }, 150);
+          }, 750);
+        });
+      });
+    }
 }

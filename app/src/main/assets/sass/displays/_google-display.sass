@@ -104,28 +104,29 @@
     margin-top: 13px
     text-align: left
     margin-right: auto
-    color: $error-accent-color
     position: relative
     padding-left: 29px
     opacity: 0
     visibility: hidden
     transform: translateY(-8px)
     transition: all 0.3s
+    &::before
+      content: ''
+      position: absolute
+      left: 0
+      top: 50%
+      transform: translateY(-50%)
+      width: 24px
+      height: 24px
+      background-repeat: no-repeat
+      background-position: center center
     &--active
       opacity: 1
       visibility: visible
       transform: translateY(0)
+      color: $error-accent-color
       &::before
-        content: ''
-        position: absolute
-        left: 0
-        top: 50%
-        transform: translateY(-50%)
-        width: 24px
-        height: 24px
         background-image: url("../images/icons/error.svg")
-        background-repeat: no-repeat
-        background-position: center center
         background-size: 20px 20px
     &--access
       opacity: 1
@@ -133,14 +134,5 @@
       transform: translateY(0)
       color: $access-accent-color
       &::before
-        content: ''
-        position: absolute
-        left: 0
-        top: 50%
-        transform: translateY(-50%)
-        width: 24px
-        height: 24px
         background-image: url("../images/icons/access.svg")
-        background-repeat: no-repeat
-        background-position: center center
         background-size: 11.15px 8.57px
