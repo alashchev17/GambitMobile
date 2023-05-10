@@ -1,5 +1,6 @@
 package com.gambitrp.mobile.network;
 
+import com.gambitrp.mobile.network.data.states.StateType;
 import com.gambitrp.mobile.network.packets.PacketError;
 import com.gambitrp.mobile.network.packets.PacketID;
 
@@ -18,7 +19,7 @@ public class WebSocket extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        System.out.println("[CLIENT] onOpen");
+        StateType.CONNECTED.set();
     }
 
     @Override

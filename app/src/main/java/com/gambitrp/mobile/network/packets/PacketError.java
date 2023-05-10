@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PacketError {
-    DATA_ERROR_1(101, "DATA_ERROR_1"),
-    DATA_ERROR_2(102, "DATA_ERROR_2"),
-    NICKNAME_NOT_FOUND(103, "NICKNAME_NOT_FOUND"),
+    NULL_DATA(101, "NULL_DATA"),
+    NULL_SESSION(102, "NULL_SESSION"),
+    SESSION_ACTIVE(103, "SESSION_ACTIVE"),
     INVALID_PASSWORD(104, "INVALID_PASSWORD"),
-    INVALID_TWO_FACTOR(105, "INVALID_TWO_FACTOR");
+    INVALID_TWO_FACTOR(105, "INVALID_TWO_FACTOR"),
+    SESSION_END_LIFE(106, "SESSION_END_LIFE"),
+    ERROR_SEND_CODE(107, "ERROR_SEND_CODE");
 
     private final int id;
     private final String description;

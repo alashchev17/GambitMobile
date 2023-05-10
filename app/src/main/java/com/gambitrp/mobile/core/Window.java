@@ -1,5 +1,7 @@
 package com.gambitrp.mobile.core;
 
+import android.webkit.WebView;
+
 import com.gambitrp.mobile.MainActivity;
 
 public class Window {
@@ -45,9 +47,17 @@ public class Window {
 
         System.out.println("[CLIENT] javaScriptCall: " + call);
 
-        activity.getWebView().post(() -> activity.getWebView().loadUrl(call.toString()));
+        WebView webView = activity.getWebView();
+        webView.post(() -> webView.loadUrl(call.toString()));
 
         return true;
+    }
+
+    public void load(String url) {
+        if (activity == null) return;
+
+        WebView webView = activity.getWebView();
+        webView.post(() -> webView.loadUrl(url));
     }
 
     public static Window getInstance() {
