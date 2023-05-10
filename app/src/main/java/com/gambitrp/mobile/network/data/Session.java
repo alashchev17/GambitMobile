@@ -49,6 +49,17 @@ public class Session {
         }
     }
 
+    public void setToken(SessionType type, UUID token) {
+        if (token == null) return;
+
+        switch (type) {
+            case SIGNATURE_TOKEN: signatureToken = token;
+                break;
+            case AUTH_TOKEN: authToken = token;
+                break;
+        }
+    }
+
     public static Session getInstance() {
         if (instance == null) {
             Session.instance = new Session();
