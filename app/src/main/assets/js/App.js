@@ -1,6 +1,6 @@
 class App extends View {
   #session = null;
-  #debug = true;
+  #loadDiplay = 'intro';
   // login(input, check) {
   //   let login = input[0];
   //   let password = input[1];
@@ -11,19 +11,13 @@ class App extends View {
     super();
     this.displaysInit(this.#debug);
     this.checkboxData(this.selectors);
+    console.log("App init");
   }
   displaysInit(debug) {
-    if (debug) {
       this.display = "first";
       setTimeout(() => {
-        this.display = "intro";
+        this.display = this.#loadDiplay;
       }, 2500);
-    } else {
-      this.display = "first";
-      setTimeout(() => {
-        this.display = "loading";
-      }, 2500);
-    }
   }
   checkboxData(selectors) {
     selectors.checkboxSpan.addEventListener("click", () => {
@@ -53,9 +47,13 @@ class App extends View {
           }
           this.selectors.googleError.textContent = "Код верен!";
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-          setTimeout(() => {
-            this.display = "main";
-          }, 1500);
+          if(this.displayName == 'first') {
+              this.#loadDiplay = 'main';
+          } else {
+              setTimeout(() => {
+                this.display = "main";
+              }, 1500);
+          }
         }, 1500);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
