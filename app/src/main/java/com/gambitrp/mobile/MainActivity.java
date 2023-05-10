@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
 
         webView.setWebViewClient(new WebClient());
         webView.setWebChromeClient(new ChromeClient());
