@@ -19,6 +19,8 @@ public class ConnectedState implements State {
             Handler handler = PacketID.AUTH.getHandler();
             handler.setData("session", data.authToken.toString());
             handler.send();
+        } else {
+            Window.getInstance().javaScriptCall("v.displaysInit");
         }
     }
 }
