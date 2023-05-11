@@ -9,15 +9,25 @@ class App extends View {
   // }
   constructor() {
     super();
-    this.displaysInit(this.#debug);
+    this.displaysInit();
     this.checkboxData(this.selectors);
     console.log("App init");
   }
-  displaysInit(debug) {
+  displaysInit() {
+    if(this.displayName == undefined) {
+      this.display = "first";
+    } else {
+      this.display = "intro";
+    }
+   /* if (this.displayName == undefined) {
       this.display = "first";
       setTimeout(() => {
         this.display = this.#loadDiplay;
-      }, 2500);
+      }, 3500);
+    } else {
+      this.#loadDiplay = 'intro';
+    }*/
+
   }
   checkboxData(selectors) {
     selectors.checkboxSpan.addEventListener("click", () => {
