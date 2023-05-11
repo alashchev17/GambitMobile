@@ -5,7 +5,8 @@ import java.util.Map;
 
 public enum StateType {
     INIT(1, new InitState()),
-    CONNECTED(2, new ConnectedState());
+    CONNECTION(2, new ConnectionState()),
+    CONNECTED(3, new ConnectedState());
 
     private final int id;
     private final State state;
@@ -36,10 +37,12 @@ public enum StateType {
         System.out.println("[CLIENT] set: " + this);
         System.out.println("[CLIENT] oldStateType: " + oldStateType);
 
-        state.beforeSet(oldStateType);
         state.set(oldStateType);
-        state.afterSet(oldStateType);
 
         oldStateType = this;
+    }
+
+    public static StateType getOldStateType() {
+        return oldStateType;
     }
 }

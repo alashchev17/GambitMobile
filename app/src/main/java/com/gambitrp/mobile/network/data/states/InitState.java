@@ -7,12 +7,4 @@ public class InitState implements State {
     public void set(StateType oldStateType) {
         Logger.getInstance().log(Logger.LoggerType.INFO, "Launcher initialization...");
     }
-
-    @Override
-    public void beforeSet(StateType oldStateType) {
-    }
-
-    @Override
-    public void afterSet(StateType oldStateType) {
-    }
 }
