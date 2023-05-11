@@ -57,13 +57,13 @@ class App extends View {
           }
           this.selectors.googleError.textContent = "Код верен!";
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-          if(this.displayName == 'first') {
+          /*if(this.displayName == 'first') {
               this.#loadDiplay = 'main';
-          } else {
+          } else {*/
               setTimeout(() => {
                 this.display = "main";
               }, 1500);
-          }
+          //}
         }, 1500);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
