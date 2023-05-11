@@ -1,6 +1,7 @@
 class App extends View {
   #session = null;
-  #loadDiplay = 'intro';
+  #loadTime = 0;
+  #minLoadTime = 3000;
   // login(input, check) {
   //   let login = input[0];
   //   let password = input[1];
@@ -16,8 +17,15 @@ class App extends View {
   displaysInit() {
     if(this.displayName == undefined) {
       this.display = "first";
+      this.#loadTime = this.time;
     } else {
-      this.display = "intro";
+      if(this.#loadTime+this.#minLoadTime > this.time) {
+         setTimeout(() => {
+            this.display = "intro"
+        }, this.#loadTime+this.#minLoadTime-this.time);
+      } else {
+        this.display = "intro";
+      }
     }
    /* if (this.displayName == undefined) {
       this.display = "first";
@@ -57,14 +65,16 @@ class App extends View {
           }
           this.selectors.googleError.textContent = "Код верен!";
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-          /*if(this.displayName == 'first') {
-              this.#loadDiplay = 'main';
-          } else {*/
+            if(this.#loadTime+(this.#minLoadTime-250) > this.time) {
               setTimeout(() => {
-                this.display = "main";
-              }, 1500);
-          //}
-        }, 1500);
+                  this.display = "main"
+              }, this.#loadTime+(this.#minLoadTime-250)-this.time);
+            } else {
+               setTimeout(() => {
+                    this.display = "main"
+                }, 250);
+            }
+        }, 250);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
             <option class="main-display__select-options" value=${response.characters[i].name}>${response.characters[i].name}</option>
@@ -170,12 +180,15 @@ class App extends View {
   launcherError(id, error) {
     switch(id) {
       case 102:
+       alert(error);
         // несуществующий личный кабинет (экран авторизации)
         break;
       case 103:
+       alert(error);
         // сессия уже активна (экран авторизации)
         break;
       case 104:
+        alert(error);
         // неверный пароль (экран авторизации)
         break;
       case 105:
@@ -270,5 +283,8 @@ class App extends View {
         }, 750);
       });
     });
+  }
+  get time() {
+    return parseInt(new Date().getTime());
   }
 }
