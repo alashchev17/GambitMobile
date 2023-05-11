@@ -2,8 +2,10 @@ package com.gambitrp.mobile;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private WebSocket webSocket;
     private Config<LauncherConfig> launcherConfig;
+
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +57,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
+        if (!webView.canGoBack()) {
+            if (exit) {
+                finish();
+            } else {
+                Toast.makeText(this, "Нажмите кнопку \"Назад\" еще раз, чтобы выйти.", Toast.LENGTH_SHORT).show();
+
+                exit = true;
+
+                new Handler().postDelayed(() -> exit = false, 3000);
+            }
         }
     }
 
