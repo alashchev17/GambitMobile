@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
         webView.setWebViewClient(new WebClient());
         webView.setWebChromeClient(new ChromeClient());
@@ -54,6 +57,20 @@ public class MainActivity extends AppCompatActivity {
             webView.goBack();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (webView != null) {
+            webView.removeAllViews();
+            webView.clearHistory();
+            webView.clearCache(true);
+            webView.destroy();
+
+            webView = null;
         }
     }
 
