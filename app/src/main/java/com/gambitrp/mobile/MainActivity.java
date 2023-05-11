@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webview);
 
+        System.out.println("[CLIENT] webView: " + webView);
+
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setUseWideViewPort(true);
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         if (!webView.canGoBack()) {
             if (exit) {
                 finish();
+
+                System.exit(0);
             } else {
                 Toast.makeText(this, "Нажмите кнопку \"Назад\" еще раз, чтобы выйти.", Toast.LENGTH_SHORT).show();
 
@@ -71,17 +75,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        webView.onPause();
+        webView.pauseTimers();
 
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        webView.resumeTimers();
+        webView.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
         if (webView != null) {
             webView.removeAllViews();
             webView.clearHistory();
             webView.clearCache(true);
+            webView.pauseTimers();
+            webView.destroyDrawingCache();
             webView.destroy();
 
             webView = null;
         }
+
+        super.onDestroy();
     }
 
     public WebView getWebView() {
