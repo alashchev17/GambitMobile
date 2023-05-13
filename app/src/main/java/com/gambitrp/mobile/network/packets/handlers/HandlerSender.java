@@ -14,23 +14,35 @@ public class HandlerSender {
 
     private HandlerSender()
     {
-        if (webSocket == null) webSocket = Window.getInstance().getActivity().getWebSocket();
+        if (webSocket == null) {
+            webSocket = Window.getInstance().getWebSocket();
+        }
     }
 
     public void send(Handler handler) {
-        if (webSocket == null) return;
+        if (webSocket == null) {
+            return;
+        }
 
-        JSONObject data = new JSONObject();
-        data.put("type", handler.getPacket().getValue());
-        data.put("launcher", launcherType);
-        data.put("data", new JSONObject(handler.getData()));
-        data.put("token", Session.getInstance().getToken(Session.SessionType.SIGNATURE_TOKEN));
+        JSONObject packet = new JSONObject();
+        JSONObject data = new JSONObject(handler.getData());
+        JSONObject addData = handler.beforeSend();
 
-        webSocket.send(data.toJSONString());
+        if (addData != null) {
+            for (Object key : addData.keySet()) {
+                data.put(key, addData.get(key));
+            }
+        }
 
-        System.out.println("[CLIENT] send: " + data);
+        packet.put("type", handler.getPacket().getValue());
+        packet.put("launcher", launcherType);
+        packet.put("data", data);
+        packet.put("token", Session.getInstance().getToken(Session.SessionType.SIGNATURE_TOKEN));
 
-        handler.packetSent();
+        webSocket.send(packet.toJSONString());
+
+        System.out.println("[CLIENT] send: " + packet);
+
         handler.map.clear();
     }
 

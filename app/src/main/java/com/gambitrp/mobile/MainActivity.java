@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webview);
 
-        System.out.println("[CLIENT] webView: " + webView);
-
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setUseWideViewPort(true);
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!webView.canGoBack()) {
+        if (webView != null && !webView.canGoBack()) {
             if (exit) {
                 finish();
 
@@ -76,8 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
-        webView.onPause();
-        webView.pauseTimers();
+        if (webView != null) {
+            webView.onPause();
+            webView.pauseTimers();
+        }
 
         super.onPause();
     }
@@ -86,8 +86,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        webView.resumeTimers();
-        webView.onResume();
+        if (webView != null) {
+            webView.resumeTimers();
+            webView.onResume();
+        }
     }
 
     @Override

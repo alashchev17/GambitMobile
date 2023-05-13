@@ -31,7 +31,9 @@ public class Session {
     }
 
     public void setToken(SessionType type, String token) {
-        if (token == null || token.isBlank()) return;
+        if (token == null || token.isBlank()) {
+            return;
+        }
 
         switch (type) {
             case SIGNATURE_TOKEN: signatureToken = UUID.fromString(token);
@@ -39,7 +41,7 @@ public class Session {
             case AUTH_TOKEN: {
                 authToken = UUID.fromString(token);
 
-                Config<LauncherConfig> cfg = Window.getInstance().getActivity().getConfig();
+                Config<LauncherConfig> cfg = Window.getInstance().getConfig();
 
                 cfg.getData().authToken = authToken;
                 cfg.saveData();
@@ -50,7 +52,9 @@ public class Session {
     }
 
     public void setToken(SessionType type, UUID token) {
-        if (token == null) return;
+        if (token == null) {
+            return;
+        }
 
         switch (type) {
             case SIGNATURE_TOKEN: signatureToken = token;

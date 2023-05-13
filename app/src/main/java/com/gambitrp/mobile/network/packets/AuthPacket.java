@@ -24,6 +24,10 @@ public class AuthPacket implements Packet {
 
             type = typeTwoFactor;
         } else {
+            if (Window.getInstance().getConfig().getData().gameVersion.isBlank()) {
+                data.remove("launcher_update");
+            }
+
             data.remove("two_factor");
             data.remove("token");
             data.remove("session_token");

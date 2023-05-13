@@ -3,6 +3,8 @@ package com.gambitrp.mobile.core;
 import android.webkit.WebView;
 
 import com.gambitrp.mobile.MainActivity;
+import com.gambitrp.mobile.core.configs.LauncherConfig;
+import com.gambitrp.mobile.network.WebSocket;
 
 public class Window {
     private static Window instance = null;
@@ -18,19 +20,24 @@ public class Window {
     }
 
     public void setActivity(MainActivity activity) {
-        if (this.activity != null) return;
+        if (this.activity != null) {
+            return;
+        }
 
         this.activity = activity;
     }
 
     public boolean javaScriptCall(String function, Object... params) {
-        if (activity == null) return false;
+        if (activity == null) {
+            return false;
+        }
 
         StringBuilder call = new StringBuilder("javascript:" + function + "(");
         int count = 0;
 
-        if (params.length == 0) call.append(");");
-        else {
+        if (params.length == 0) {
+            call.append(");");
+        } else {
             for (Object object : params) {
                 switch (object.getClass().getSimpleName()) {
                     case "Integer":
@@ -40,24 +47,32 @@ public class Window {
                         break;
                 }
 
-                if (++count == params.length) call.append(");");
-                else call.append(", ");
+                if (++count == params.length) {
+                    call.append(");");
+                } else {
+                    call.append(", ");
+                }
             }
         }
 
         System.out.println("[CLIENT] javaScriptCall: " + call);
 
-        WebView webView = activity.getWebView();
+        WebView webView = getWebView();
         webView.post(() -> webView.loadUrl(call.toString()));
 
         return true;
     }
 
-    public void load(String url) {
-        if (activity == null) return;
+    public WebView getWebView() {
+        return activity.getWebView();
+    }
 
-        WebView webView = activity.getWebView();
-        webView.post(() -> webView.loadUrl(url));
+    public WebSocket getWebSocket() {
+        return activity.getWebSocket();
+    }
+
+    public Config<LauncherConfig> getConfig() {
+        return activity.getConfig();
     }
 
     public static Window getInstance() {

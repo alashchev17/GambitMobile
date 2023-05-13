@@ -33,7 +33,9 @@ public class Logger implements AutoCloseable {
     }
 
     public void log(LoggerType type, String format, Object... params) {
-        if (handle == null) return;
+        if (handle == null) {
+            return;
+        }
 
         MessageFormat row = new MessageFormat(format);
         row.format(params);
@@ -58,6 +60,8 @@ public class Logger implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        if (handle != null) handle.close();
+        if (handle != null) {
+            handle.close();
+        }
     }
 }
