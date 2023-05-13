@@ -22,7 +22,9 @@ public class Config<T> {
 
     public Config(String name, Class<T> type) {
         File dir = new File(path);
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
 
         String pathFile = path + "/" + name + ".conf";
         File file = new File(pathFile);

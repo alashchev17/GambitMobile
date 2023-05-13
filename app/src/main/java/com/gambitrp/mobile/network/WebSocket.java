@@ -37,10 +37,14 @@ public class WebSocket extends WebSocketClient {
         }
 
         JSONObject jsonObject = (JSONObject) object;
-        if (jsonObject == null) return;
+        if (jsonObject == null) {
+            return;
+        }
 
         Long id = (Long) jsonObject.get("type");
-        if (id == null) return;
+        if (id == null) {
+            return;
+        }
 
         packet = PacketID.valueOf(id.intValue());
 
@@ -48,7 +52,9 @@ public class WebSocket extends WebSocketClient {
             JSONObject data;
 
             data = (JSONObject) jsonObject.get("response");
-            if (data == null) return;
+            if (data == null) {
+                return;
+            }
 
             Long error = (Long) data.get("error");
 
