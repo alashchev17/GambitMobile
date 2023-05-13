@@ -15,13 +15,13 @@ class App extends View {
     console.log("App init");
   }
   displaysInit() {
-    if(this.displayName == undefined) {
+    if (this.displayName == undefined) {
       this.display = "first";
       this.#loadTime = this.time;
     } else {
       if(this.#loadTime+this.#minLoadTime > this.time) {
-         setTimeout(() => {
-            this.display = "intro"
+        setTimeout(() => {
+          this.display = "intro"
         }, this.#loadTime+this.#minLoadTime-this.time);
       } else {
         this.display = "intro";
@@ -36,15 +36,24 @@ class App extends View {
       this.#loadDiplay = 'intro';
     }*/
 
-  }
+    }
   checkboxData(selectors) {
     selectors.checkboxSpan.addEventListener("click", () => {
-      if (!selectors.authCheckbox.classList.contains("checkbox__label--active")) {
+      if (!selectors.authCheckbox.classList.contains(selectors.authCheckbox.classList[0] + this.active)) {
         selectors.authCheckboxOrigin.checked = true;
       } else {
         selectors.authCheckboxOrigin.checked = false;
       }
-      selectors.authCheckbox.classList.toggle("checkbox__label--active");
+      selectors.authCheckbox.classList.toggle(selectors.authCheckbox.classList[0] + this.active);
+      console.log(selectors.authCheckboxOrigin.checked);
+    });
+    selectors.authCheckbox.addEventListener("click", () => {
+      if (!selectors.authCheckbox.classList.contains(selectors.authCheckbox.classList[0] + this.active)) {
+        selectors.authCheckboxOrigin.checked = true;
+      } else {
+        selectors.authCheckboxOrigin.checked = false;
+      }
+      selectors.authCheckbox.classList.toggle(selectors.authCheckbox.classList[0] + this.active);
       console.log(selectors.authCheckboxOrigin.checked);
     });
   }
@@ -53,6 +62,9 @@ class App extends View {
     switch(type) {
       case 1:
         // первый тип, data=null, вывод двухфакторной аутентификации
+        this.selectors.rootError.classList.add(this.selectors.rootError.classList[0] + this.access);
+        this.selectors.rootError.textContent = "Успешная авторизация!";
+        this.rootErrorHandler(this.selectors);
         this.display = "google";
         break;
       case 2:
@@ -64,16 +76,16 @@ class App extends View {
             this.googleInputs[i].classList.add(this.googleInputs[i].classList[0] + this.access);
           }
           this.selectors.googleError.textContent = "Код верен!";
+          if (this.#loadTime+(this.#minLoadTime-250) > this.time) {
+            setTimeout(() => {
+              this.display = "main";
+            }, this.#loadTime+(this.#minLoadTime-250)-this.time);
+          } else {
+            setTimeout(() => {
+              this.display = "main";
+            }, 250);
+          }
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-            if(this.#loadTime+(this.#minLoadTime-250) > this.time) {
-              setTimeout(() => {
-                  this.display = "main"
-              }, this.#loadTime+(this.#minLoadTime-250)-this.time);
-            } else {
-               setTimeout(() => {
-                    this.display = "main"
-                }, 250);
-            }
         }, 250);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
@@ -89,7 +101,14 @@ class App extends View {
             </li>
           `;
         }
-        this.mainSelectHandler(this.selectors);
+        let characterSelectItemsNew = document.querySelectorAll(".main-display__select-item");
+        let characterSelectItemsNewArray = Array.prototype.slice.call(characterSelectItemsNew);
+        let characterSelectNameNew = document.querySelectorAll(".main-display__select-name")
+        let characterSelectOriginOptionsNew = document.querySelectorAll(".main-display__select-options");
+
+        console.log(characterSelectItemsNew);
+        console.log(characterSelectOriginOptionsNew);
+        this.mainSelectHandler(this.selectors, characterSelectItemsNewArray, characterSelectOriginOptionsNew, characterSelectNameNew);
 //        characterSelectCustom.addEventListener("click", event => {
 //          event.preventDefault();
 //          if (this.characterSelectItemsArray.some(item => item.classList.contains("active"))) {
@@ -179,17 +198,26 @@ class App extends View {
   }
   launcherError(id, error) {
     switch(id) {
+      case 101:
+        this.selectors.rootError.textContent = "Неверный никнейм!";
+        this.authInputErrorHandler(this.auth[0], this.auth[1]);
+        this.rootErrorHandler(this.selectors);
       case 102:
-       alert(error);
         // несуществующий личный кабинет (экран авторизации)
+        this.selectors.rootError.textContent = "Неверный никнейм!";
+        this.authInputErrorHandler(this.auth[0]);
+        this.rootErrorHandler(this.selectors);
         break;
       case 103:
-       alert(error);
         // сессия уже активна (экран авторизации)
+        this.selectors.rootError.textContent = "Сессия уже активна!";
+        this.rootErrorHandler(this.selectors);
         break;
       case 104:
-        alert(error);
         // неверный пароль (экран авторизации)
+        this.selectors.rootError.textContent = "Введён неверный пароль!";
+        this.authInputErrorHandler(this.auth[1]);
+        this.rootErrorHandler(this.selectors);
         break;
       case 105:
         setTimeout(() => {
@@ -219,14 +247,14 @@ class App extends View {
         break;
     }
   }
-  mainSelectHandler(selectors) {
+  mainSelectHandler(selectors, itemsArray, originOptions, characterNames) {
     selectors.characterSelectCustom.addEventListener("click", event => {
       event.preventDefault();
-      if (this.characterSelectItemsArray.some(item => item.classList.contains("active"))) {
-        this.characterSelectItems.forEach(item => {
+      if (itemsArray.some(item => item.classList.contains("active"))) {
+        itemsArray.forEach(item => {
           item.classList.remove("active");
         });
-        this.characterSelectOriginOptions[0].setAttribute("selected", "selected");
+        originOptions[0].setAttribute("selected", "selected");
       }
       setTimeout(() => {
         selectors.characterSelectCustom.classList.toggle("active");
@@ -252,22 +280,22 @@ class App extends View {
       }, 150);
     });
 
-    this.characterSelectItems.forEach((item, index) => {
+    itemsArray.forEach((item, index) => {
       item.addEventListener("click", () => {
         if (item.getAttribute("data-game") == false) {
           this.selectors.startGameButton.setAttribute("disabled", "disabled");
         } else if (item.getAttribute("data-game") == true) {
           this.selectors.startGameButton.removeAttribute("disabled");
         }
-        this.characterSelectOriginOptions[index].removeAttribute("selected");
-        this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
-        if (this.characterSelectOriginOptions[index + 1].hasAttribute("selected")) {
-          this.characterSelectOriginOptions[index + 1].removeAttribute("selected");
-          this.characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
+        originOptions[index].removeAttribute("selected");
+        originOptions[index + 1].setAttribute("selected", "selected");
+        if (originOptions[index + 1].hasAttribute("selected")) {
+          originOptions[index + 1].removeAttribute("selected");
+          originOptions[index + 1].setAttribute("selected", "selected");
         }
         item.classList.toggle("active");
         console.log(this.characterSelectOrigin.value);
-        selectors.characterSelectCustom.textContent = this.characterSelectName[index].textContent;
+        selectors.characterSelectCustom.textContent = characterNames[index].textContent;
         // прячем кастомный селект
         setTimeout(() => {
           selectors.characterSelectCustom.classList.remove("active");
@@ -284,7 +312,18 @@ class App extends View {
       });
     });
   }
-  get time() {
-    return parseInt(new Date().getTime());
+  rootErrorHandler(selectors) {
+    selectors.rootError.classList.add(selectors.rootError.classList[0] + this.active);
+    setTimeout(() => {
+      selectors.rootError.classList.remove(selectors.rootError.classList[0] + this.active);
+    }, 2000);
+  }
+  authInputErrorHandler(input, ...args) {
+    input.classList.add(input.classList[0] + this.error);
+    if (args[0] != undefined) args[0].classList.add(args[0].classList[0] + this.error);
+    setTimeout(() => {
+      input.classList.remove(input.classList[0] + this.error);
+      if (args[0] != undefined) args[0].classList.remove(args[0].classList[0] + this.error);
+    }, 2000);
   }
 }

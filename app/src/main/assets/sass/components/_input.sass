@@ -9,7 +9,12 @@
   padding: 15px
   border-radius: 10px
   background-color: #121212
+  border: 1px solid transparent
+  transition: all 0.3s
   &:focus
     color: $white
   &::placeholder
     color: $gray
+    transition: all 0.3s
+  &--error
+    border: 1px solid $error-accent-color

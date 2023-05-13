@@ -12,6 +12,7 @@
 </head>
 <body>
   <div class="root">
+    <span class="root__error">Неверный пароль!</span>
     <div class="first-display first-display--hidden first-display--dnone">
       <img src="./images/logo.svg" alt="Gambit RP Logotype" class="first-display__logo">
     </div>
@@ -64,7 +65,7 @@
           <span class="auth-display__label" id="checkbox__span">Запомните меня</span>
         </div>
         <!-- /.modal-checkbox -->
-        <button class="button auth-display__button button--primary" type="submit">Войти в аккаунт</button>
+        <button class="button auth-display__button button--primary" disabled="disabled" type="submit">Войти в аккаунт</button>
       </form>
       <span class="auth-display__register">Нет аккаунта? <a href="#" class="auth-display__link">Зарегистрируйтесь</a></span>
     </div>
