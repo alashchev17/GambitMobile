@@ -28,9 +28,9 @@ class View {
     notificationOpen: ".main-display__notification",
     notificationClose: ".notification-content__link--close",
     notificationRead: "#notificationRead",
-    mainDisplayButton: ".main-display__button",
     newsContent: ".news-content",
     settingsContent: ".settings-content",
+    settingsLogoutButton: ".settings-content__button--logout",
     tabMain: ".tabs__item--main",
     tabSettings: ".tabs__item--settings",
     tabNews: ".tabs__item--news",
@@ -151,7 +151,12 @@ class View {
           selectors.authButton.removeAttribute("disabled");
         }
       });
-    })
+    });
+    selectors.settingsLogoutButton.addEventListener("click", event => {
+      event.preventDefault();
+      console.log("Сессия обнулена");
+      Launcher.SessionExit();
+    });
   }
 
   googleInputsHandler(selectors) {
@@ -207,7 +212,7 @@ class View {
     this.mainTabsArray.forEach(item => {
       item.addEventListener("click", event => {
         event.preventDefault();
-        console.log("ивент запущен, event.target = " + event.target.classList[1]);
+        console.log("event.target = " + event.target.classList[1]);
         if (event.target.classList[1] == selectors.tabMain.classList[1]) {
           if (!selectors.tabMain.classList.contains(selectors.tabMain.classList[0] + this.active)) {
             selectors.tabMain.classList.add(selectors.tabMain.classList[0] + this.active);
