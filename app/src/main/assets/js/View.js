@@ -34,6 +34,8 @@ class View {
     tabMain: ".tabs__item--main",
     tabSettings: ".tabs__item--settings",
     tabNews: ".tabs__item--news",
+    errorDisplay: ".error-display",
+    errorDisplayButton: ".error-display__button"
   };
   active = "--active";
   hidden = "--hidden";
@@ -156,6 +158,10 @@ class View {
       event.preventDefault();
       console.log("Сессия обнулена");
       Launcher.SessionExit();
+    });
+    selectors.errorDisplayButton.addEventListener("click", event => {
+      event.preventDefault();
+      Launcher.Reconnect();
     });
   }
 
