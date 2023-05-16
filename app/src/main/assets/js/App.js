@@ -62,9 +62,6 @@ class App extends View {
     switch(type) {
       case 1:
         // первый тип, data=null, вывод двухфакторной аутентификации
-        this.selectors.rootError.classList.add(this.selectors.rootError.classList[0] + this.access);
-        this.selectors.rootError.textContent = "Успешная авторизация!";
-        this.rootErrorHandler(this.selectors);
         this.display = "google";
         break;
       case 2:
@@ -76,17 +73,20 @@ class App extends View {
             this.googleInputs[i].classList.add(this.googleInputs[i].classList[0] + this.access);
           }
           this.selectors.googleError.textContent = "Код верен!";
-          if (this.#loadTime+(this.#minLoadTime-250) > this.time) {
+          this.selectors.rootError.classList.add(this.selectors.rootError.classList[0] + this.access);
+          this.selectors.rootError.textContent = "Успешная авторизация!";
+          this.rootErrorHandler(this.selectors);
+          if (this.#loadTime+(this.#minLoadTime-1000) > this.time) {
             setTimeout(() => {
               this.display = "main";
-            }, this.#loadTime+(this.#minLoadTime-250)-this.time);
+            }, this.#loadTime+(this.#minLoadTime-1000)-this.time);
           } else {
             setTimeout(() => {
               this.display = "main";
-            }, 250);
+            }, 1000);
           }
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-        }, 250);
+        }, 1500);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
             <option class="main-display__select-options" value=${response.characters[i].name}>${response.characters[i].name}</option>
