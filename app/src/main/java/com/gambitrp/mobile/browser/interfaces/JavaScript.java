@@ -25,6 +25,6 @@ public class JavaScript {
         handler.setData("password", DigestUtils.sha256Hex(password));
         handler.setData("save", remember);
         handler.setData("code", code);
-        handler.send();
+        handler.send(true);
     }
 }

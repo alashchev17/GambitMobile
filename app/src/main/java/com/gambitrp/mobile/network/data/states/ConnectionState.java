@@ -16,7 +16,7 @@ public class ConnectionState implements State
             WebSocket webSocket = new WebSocket(new URI(serverAddress));
             webSocket.connect();
 
-            Window.getInstance().getActivity().setWebSocket(webSocket);
+            Window.getContext().setWebSocket(webSocket);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

@@ -1,13 +1,15 @@
 package com.gambitrp.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.gambitrp.mobile.browser.ChromeClient;
 import com.gambitrp.mobile.browser.WebClient;
@@ -19,12 +21,20 @@ import com.gambitrp.mobile.network.WebSocket;
 import com.gambitrp.mobile.network.data.states.StateType;
 
 @SuppressLint("SetJavaScriptEnabled")
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private final String indexFile = "file:///android_asset/index.html";
 
-    private WebView webView;
-    private WebSocket webSocket;
-    private Config<LauncherConfig> launcherConfig;
+    private final int windowFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+    protected Window window;
+
+    public WebView webView;
+    public WebSocket webSocket;
+    public Config<LauncherConfig> launcherConfig;
 
     private Boolean exit = false;
 
@@ -32,7 +42,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Window.getInstance().setActivity(this);
+        System.out.println("[CLIENT] onCreate");
+
+        android.view.Window window = getWindow();
+        View view = getWindow().getDecorView();
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        view.setSystemUiVisibility(windowFlags);
+        window.setStatusBarColor(Color.TRANSPARENT);
+
+        view.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                view.setSystemUiVisibility(windowFlags);
+            }
+        });
+
+        this.window = (Window) getApplicationContext();
+        this.window.setActivity(this);
 
         StateType.INIT.set();
 
@@ -49,47 +75,34 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebClient());
         webView.setWebChromeClient(new ChromeClient());
 
-        webView.addJavascriptInterface(new JavaScript(this), "Launcher");
+        webView.addJavascriptInterface(new JavaScript(window.getContext()), "Launcher");
         webView.loadUrl(indexFile);
 
         launcherConfig = new Config<>("launcher", LauncherConfig.class);
     }
 
     @Override
-    public void onBackPressed() {
-        if (webView != null && !webView.canGoBack()) {
-            if (exit) {
-                finish();
+    public void onResume() {
+        super.onResume();
 
-                System.exit(0);
-            } else {
-                Toast.makeText(this, "Нажмите кнопку \"Назад\" еще раз, чтобы выйти.", Toast.LENGTH_SHORT).show();
+        System.out.println("[CLIENT] onResume");
 
-                exit = true;
-
-                new Handler().postDelayed(() -> exit = false, 3000);
-            }
+        if (webView != null) {
+            webView.resumeTimers();
+            webView.onResume();
         }
     }
 
     @Override
     public void onPause() {
+        System.out.println("[CLIENT] onPause");
+
         if (webView != null) {
             webView.onPause();
             webView.pauseTimers();
         }
 
         super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (webView != null) {
-            webView.resumeTimers();
-            webView.onResume();
-        }
     }
 
     @Override
@@ -108,19 +121,34 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public WebView getWebView() {
-        return webView;
+    @Override
+    public void onBackPressed() {
+        System.out.println("[CLIENT] onBackPressed");
+
+        if (exit) {
+            finish();
+
+            System.exit(0);
+        } else {
+            Toast.makeText(window, "Нажмите кнопку \"Назад\" еще раз, чтобы выйти.", Toast.LENGTH_SHORT).show();
+
+            exit = true;
+
+            new Handler().postDelayed(() -> exit = false, 3000);
+        }
     }
 
-    public void setWebSocket(WebSocket webSocket) {
-        this.webSocket = webSocket;
-    }
+    @SuppressLint("NewApi")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
 
-    public WebSocket getWebSocket() {
-        return webSocket;
-    }
+        android.view.Window window = getWindow();
+        View view = getWindow().getDecorView();
 
-    public Config<LauncherConfig> getConfig() {
-        return launcherConfig;
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        view.setSystemUiVisibility(windowFlags);
+        window.setStatusBarColor(Color.TRANSPARENT);
     }
 }

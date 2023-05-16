@@ -21,7 +21,7 @@ public class Logger implements AutoCloseable {
     }
 
     private Logger() {
-        String path = Window.getInstance().getActivity().getFilesDir().getAbsolutePath() + "/" + logName;
+        String path = Window.getContext().getActivity().getFilesDir().getAbsolutePath() + "/" + logName;
 
         System.out.println("[CLIENT] path: " + path);
 

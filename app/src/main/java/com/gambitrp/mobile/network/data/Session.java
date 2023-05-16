@@ -41,7 +41,7 @@ public class Session {
             case AUTH_TOKEN: {
                 authToken = UUID.fromString(token);
 
-                Config<LauncherConfig> cfg = Window.getInstance().getConfig();
+                Config<LauncherConfig> cfg = Window.getContext().getConfig();
 
                 cfg.getData().authToken = authToken;
                 cfg.saveData();
