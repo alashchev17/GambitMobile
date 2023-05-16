@@ -65,6 +65,8 @@ public class WebSocket extends WebSocketClient {
 
                     Long error = (Long) data.get("error");
 
+                    packet.getPacket().clearHandler(packet.getHandler());
+
                     if(error != null) {
                         packet.getPacket().error(PacketError.valueOf(error.intValue()));
 
@@ -72,7 +74,6 @@ public class WebSocket extends WebSocketClient {
                     }
 
                     packet.getPacket().response(data);
-                    packet.getPacket().clearHandler(packet.getHandler());
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
