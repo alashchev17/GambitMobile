@@ -62,9 +62,6 @@ class App extends View {
     switch(type) {
       case 1:
         // первый тип, data=null, вывод двухфакторной аутентификации
-        this.selectors.rootError.classList.add(this.selectors.rootError.classList[0] + this.access);
-        this.selectors.rootError.textContent = "Успешная авторизация!";
-        this.rootErrorHandler(this.selectors);
         this.display = "google";
         break;
       case 2:
@@ -76,17 +73,20 @@ class App extends View {
             this.googleInputs[i].classList.add(this.googleInputs[i].classList[0] + this.access);
           }
           this.selectors.googleError.textContent = "Код верен!";
-          if (this.#loadTime+(this.#minLoadTime-250) > this.time) {
+          this.selectors.rootError.classList.add(this.selectors.rootError.classList[0] + this.access);
+          this.selectors.rootError.textContent = "Успешная авторизация!";
+          this.rootErrorHandler(this.selectors);
+          if (this.#loadTime+(this.#minLoadTime-1000) > this.time) {
             setTimeout(() => {
               this.display = "main";
-            }, this.#loadTime+(this.#minLoadTime-250)-this.time);
+            }, this.#loadTime+(this.#minLoadTime-1000)-this.time);
           } else {
             setTimeout(() => {
               this.display = "main";
-            }, 250);
+            }, 1000);
           }
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
-        }, 250);
+        }, 1500);
         for (let i = 0; i != response.characters.length; i++) {
           this.characterSelectOrigin.innerHTML += `
             <option class="main-display__select-options" value=${response.characters[i].name}>${response.characters[i].name}</option>
@@ -109,90 +109,6 @@ class App extends View {
         console.log(characterSelectItemsNew);
         console.log(characterSelectOriginOptionsNew);
         this.mainSelectHandler(this.selectors, characterSelectItemsNewArray, characterSelectOriginOptionsNew, characterSelectNameNew);
-//        characterSelectCustom.addEventListener("click", event => {
-//          event.preventDefault();
-//          if (this.characterSelectItemsArray.some(item => item.classList.contains("active"))) {
-//            characterSelectItems.forEach(item => {
-//              item.classList.remove("active");
-//            });
-//            characterSelectOriginOptions[0].setAttribute("selected", "selected");
-//          }
-//          setTimeout(() => {
-//            characterSelectCustom.classList.toggle("active");
-//            if (characterSelectCustom.classList.contains("active")) {
-//              mainDisplayButton.classList.add("hidden");
-//              mainDisplayButton.classList.remove("active");
-//              setTimeout(() => {
-//                setTimeout(() => {
-//                  characterSelectContent.classList.toggle("dnone");
-//                }, 150);
-//                characterSelectContent.classList.toggle("active");
-//                characterSelectContent.classList.toggle("hidden");
-//              }, 50);
-//            } else {
-//              characterSelectContent.classList.toggle("active");
-//              characterSelectContent.classList.toggle("hidden");
-//              setTimeout(() => {
-//                mainDisplayButton.classList.add("active");
-//                mainDisplayButton.classList.remove("hidden");
-//                characterSelectContent.classList.toggle("dnone");
-//              }, 300);
-//            }
-//          }, 150);
-//        });
-//        characterSelectItems.forEach((item, index) => {
-//          item.addEventListener("click", () => {
-//            if (item.getAttribute("data-game") == false) {
-//              startGameButton.setAttribute("disabled", "disabled");
-//            } else if (item.getAttribute("data-game") == true) {
-//              startGameButton.removeAttribute("disabled");
-//            }
-//            characterSelectOriginOptions[index].removeAttribute("selected");
-//            characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
-//            if (characterSelectOriginOptions[index + 1].hasAttribute("selected")) {
-//              characterSelectOriginOptions[index + 1].removeAttribute("selected");
-//              characterSelectOriginOptions[index + 1].setAttribute("selected", "selected");
-//            }
-//            item.classList.toggle("active");
-//            console.log(characterSelectOrigin.value);
-//            characterSelectCustom.textContent = characterSelectName[index].textContent;
-//            // прячем кастомный селект
-//            setTimeout(() => {
-//              characterSelectCustom.classList.remove("active");
-//              characterSelectContent.classList.remove("active");
-//              characterSelectContent.classList.add("hidden");
-//              setTimeout(() => {
-//                characterSelectContent.classList.add("dnone");
-//                setTimeout(() => {
-//                  mainDisplayButton.classList.add("active");
-//                  mainDisplayButton.classList.remove("hidden");
-//                }, 150);
-//              }, 150);
-//            }, 750);
-//          });
-//        });
-        /* пройдена аутентификация, data={
-          "user_id": 66902,
-          "user_login": "testlc", --> логин, который отображается в хедере
-          "characters": --> список персонажей для рендера в селекте
-            [
-              {
-                "game": true,
-                "name": "testAcc_One",
-                "skin": 0,
-                "id": 480423,
-                "status": "Одобрен"
-              },
-              {
-                "game": true,
-                "name": "test_Two",
-                "skin": 0,
-                "id": 480424,
-                "status": "Одобрен"
-              }
-            ]
-        }
-        */
         break;
     }
   }
@@ -259,8 +175,8 @@ class App extends View {
       setTimeout(() => {
         selectors.characterSelectCustom.classList.toggle("active");
         if (selectors.characterSelectCustom.classList.contains("active")) {
-          selectors.mainDisplayButton.classList.add("hidden");
-          selectors.mainDisplayButton.classList.remove("active");
+          selectors.startGameButton.classList.add("hidden");
+          selectors.startGameButton.classList.remove("active");
           setTimeout(() => {
             setTimeout(() => {
               selectors.characterSelectContent.classList.toggle("dnone");
@@ -272,8 +188,8 @@ class App extends View {
           selectors.characterSelectContent.classList.toggle("active");
           selectors.characterSelectContent.classList.toggle("hidden");
           setTimeout(() => {
-            selectors.mainDisplayButton.classList.add("active");
-            selectors.mainDisplayButton.classList.remove("hidden");
+            selectors.startGameButton.classList.add("active");
+            selectors.startGameButton.classList.remove("hidden");
             selectors.characterSelectContent.classList.toggle("dnone");
           }, 300);
         }
@@ -282,9 +198,9 @@ class App extends View {
 
     itemsArray.forEach((item, index) => {
       item.addEventListener("click", () => {
-        if (item.getAttribute("data-game") == false) {
+        if (item.getAttribute("data-game") == "false") {
           this.selectors.startGameButton.setAttribute("disabled", "disabled");
-        } else if (item.getAttribute("data-game") == true) {
+        } else if (item.getAttribute("data-game") == "true") {
           this.selectors.startGameButton.removeAttribute("disabled");
         }
         originOptions[index].removeAttribute("selected");
@@ -304,8 +220,8 @@ class App extends View {
           setTimeout(() => {
             selectors.characterSelectContent.classList.add("dnone");
             setTimeout(() => {
-              selectors.mainDisplayButton.classList.add("active");
-              selectors.mainDisplayButton.classList.remove("hidden");
+              selectors.startGameButton.classList.add("active");
+              selectors.startGameButton.classList.remove("hidden");
             }, 150);
           }, 150);
         }, 750);
@@ -325,5 +241,8 @@ class App extends View {
       input.classList.remove(input.classList[0] + this.error);
       if (args[0] != undefined) args[0].classList.remove(args[0].classList[0] + this.error);
     }, 2000);
+  }
+  get time() {
+    return new Date().getTime();
   }
 }
