@@ -10,7 +10,7 @@ import com.gambitrp.mobile.network.packets.handlers.Handler;
 public class ConnectedState implements State {
     @Override
     public void set(StateType oldStateType) {
-        Config<LauncherConfig> cfg = Window.getInstance().getConfig();
+        Config<LauncherConfig> cfg = Window.getContext().getConfig();
         LauncherConfig data = cfg.getData();
 
         if(data.authToken != null) {
@@ -18,9 +18,9 @@ public class ConnectedState implements State {
 
             Handler handler = PacketID.AUTH.getHandler();
             handler.setData("session", data.authToken.toString());
-            handler.send();
+            handler.send(true);
         } else {
-            Window.getInstance().javaScriptCall("v.displaysInit");
+            Window.getContext().javaScriptCall("v.displaysInit");
         }
     }
 }

@@ -9,6 +9,7 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <application
+        android:name="com.gambitrp.mobile.core.Window"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,10 +17,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.GambitMobile.NoActionBar"
+        android:theme="@android:style/Theme.NoTitleBar"
+        android:fitsSystemWindows="true"
         tools:targetApi="31" >
         <activity android:name="MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
+            android:alwaysRetainTaskState="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

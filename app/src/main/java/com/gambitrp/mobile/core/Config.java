@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Semaphore;
 
 public class Config<T> {
-    private final String path = Window.getInstance().getActivity().getFilesDir().getAbsolutePath() + "/configs";
+    private final String path = Window.getContext().getFilesDir().getAbsolutePath() + "/configs";
     private final String name;
     private final String pathFile;
 

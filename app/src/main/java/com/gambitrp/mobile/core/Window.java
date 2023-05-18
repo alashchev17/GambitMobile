@@ -1,18 +1,36 @@
 package com.gambitrp.mobile.core;
 
+import android.app.Application;
+import android.content.Context;
 import android.webkit.WebView;
 
 import com.gambitrp.mobile.MainActivity;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 import com.gambitrp.mobile.network.WebSocket;
 
-public class Window {
-    private static Window instance = null;
+import java.lang.ref.WeakReference;
+
+public class Window extends Application {
+    private static WeakReference<Context> context;
 
     private MainActivity activity = null;
 
-    private Window()
-    {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        context = new WeakReference<>(getApplicationContext());
+    }
+
+    @Override
+    public void onTerminate() {
+        context.clear();
+
+        super.onTerminate();
+    }
+
+    public static Window getContext() {
+        return (Window) context.get();
     }
 
     public MainActivity getActivity() {
@@ -20,10 +38,6 @@ public class Window {
     }
 
     public void setActivity(MainActivity activity) {
-        if (this.activity != null) {
-            return;
-        }
-
         this.activity = activity;
     }
 
@@ -55,31 +69,39 @@ public class Window {
             }
         }
 
-        System.out.println("[CLIENT] javaScriptCall: " + call);
+        System.out.println("[CLIENT] evaluateJavascript: " + call);
 
         WebView webView = getWebView();
-        webView.post(() -> webView.loadUrl(call.toString()));
+        webView.post(() -> webView.evaluateJavascript(call.toString(), null));
 
         return true;
     }
 
     public WebView getWebView() {
-        return activity.getWebView();
+        if (activity == null) {
+            return null;
+        }
+
+        return activity.webView;
     }
 
     public WebSocket getWebSocket() {
-        return activity.getWebSocket();
+        if (activity == null) {
+            return null;
+        }
+
+        return activity.webSocket;
+    }
+
+    public void setWebSocket(WebSocket webSocket) {
+        activity.webSocket = webSocket;
     }
 
     public Config<LauncherConfig> getConfig() {
-        return activity.getConfig();
-    }
-
-    public static Window getInstance() {
-        if (instance == null) {
-            Window.instance = new Window();
+        if (activity == null) {
+            return null;
         }
 
-        return Window.instance;
+        return activity.launcherConfig;
     }
 }

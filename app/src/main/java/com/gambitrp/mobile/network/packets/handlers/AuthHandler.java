@@ -14,7 +14,7 @@ public class AuthHandler implements Handler {
     @Override
     public JSONObject beforeSend() {
         JSONObject data = new JSONObject();
-        data.put("version", Window.getInstance().getConfig().getData().gameVersion);
+        data.put("version", Window.getContext().getConfig().getData().gameVersion);
 
         return data;
     }

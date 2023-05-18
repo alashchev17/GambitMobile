@@ -24,7 +24,7 @@ public class AuthPacket implements Packet {
 
             type = typeTwoFactor;
         } else {
-            if (Window.getInstance().getConfig().getData().gameVersion.isBlank()) {
+            if (Window.getContext().getConfig().getData().gameVersion.isBlank()) {
                 data.remove("launcher_update");
             }
 
@@ -35,12 +35,12 @@ public class AuthPacket implements Packet {
             type = typeAuthorized;
         }
 
-        Window.getInstance().javaScriptCall("v.launcherResponse", type, data.toJSONString());
+        Window.getContext().javaScriptCall("v.launcherResponse", type, data.toJSONString());
     }
 
     @Override
     public void error(PacketError error) {
-        Window.getInstance().javaScriptCall("v.launcherError", error.getValue(), error.getDescription());
+        Window.getContext().javaScriptCall("v.launcherError", error.getValue(), error.getDescription());
 
         System.out.println("[CLIENT] error: " + error);
     }

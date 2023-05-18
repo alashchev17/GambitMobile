@@ -11,8 +11,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.net.URI;
+import java.util.concurrent.Semaphore;
 
 public class WebSocket extends WebSocketClient {
+    private final Semaphore semaphoreMsg = new Semaphore(1);
+
     public WebSocket(URI serverURI) {
         super(serverURI);
     }
@@ -26,46 +29,58 @@ public class WebSocket extends WebSocketClient {
     public void onMessage(String message) {
         System.out.println("[CLIENT] onMessage: " + message);
 
-        JSONParser jsonParser = new JSONParser();
-        Object object;
-        PacketID packet;
+        new Thread(() -> {
+            try {
+                semaphoreMsg.acquire();
 
-        try {
-            object = jsonParser.parse(message);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+                JSONParser jsonParser = new JSONParser();
+                Object object;
+                PacketID packet;
 
-        JSONObject jsonObject = (JSONObject) object;
-        if (jsonObject == null) {
-            return;
-        }
+                try {
+                    object = jsonParser.parse(message);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
 
-        Long id = (Long) jsonObject.get("type");
-        if (id == null) {
-            return;
-        }
+                JSONObject jsonObject = (JSONObject) object;
+                if (jsonObject == null) {
+                    return;
+                }
 
-        packet = PacketID.valueOf(id.intValue());
+                Long id = (Long) jsonObject.get("type");
+                if (id == null) {
+                    return;
+                }
 
-        if (packet != null) {
-            JSONObject data;
+                packet = PacketID.valueOf(id.intValue());
 
-            data = (JSONObject) jsonObject.get("response");
-            if (data == null) {
-                return;
+                if (packet != null) {
+                    JSONObject data;
+
+                    data = (JSONObject) jsonObject.get("response");
+                    if (data == null) {
+                        return;
+                    }
+
+                    Long error = (Long) data.get("error");
+
+                    packet.getPacket().clearHandler(packet.getHandler());
+
+                    if(error != null) {
+                        packet.getPacket().error(PacketError.valueOf(error.intValue()));
+
+                        return;
+                    }
+
+                    packet.getPacket().response(data);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                semaphoreMsg.release();
             }
-
-            Long error = (Long) data.get("error");
-
-            if(error != null) {
-                packet.getPacket().error(PacketError.valueOf(error.intValue()));
-
-                return;
-            }
-
-            packet.getPacket().response(data);
-        }
+        }).start();
     }
 
     @Override

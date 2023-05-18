@@ -15,7 +15,7 @@ public class HandlerSender {
     private HandlerSender()
     {
         if (webSocket == null) {
-            webSocket = Window.getInstance().getWebSocket();
+            webSocket = Window.getContext().getWebSocket();
         }
     }
 
