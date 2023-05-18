@@ -145,6 +145,29 @@ class View {
         Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
       }
     });
+    this.googleInputs[0].addEventListener("click", () => {
+      navigator.clipboard.readText()
+        .then(text => {
+//        если
+        this.googleCode = text;
+        for (let i = 0; i != this.googleInputs.length; i++) {
+          this.googleInputs[i].value = text[i];
+        }
+        googleInputs[5].focus();
+        for (let i = 0; i < this.googleInputs.length; i++) {
+          this.googleInputs[i].setAttribute("disabled", "disabled");
+        }
+        let googleCodeNumber = Number(this.googleCode);
+        console.warn("Полученный код из буфера: " + googleCodeNumber);
+        let check = selectors.authCheckboxOrigin;
+        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
+        })
+        .catch(err => {
+          alert("Что-то пошло не так. Ошибка: " + err);
+          // вставка текста из буфера не удалась, стандартный сценарий
+          this.googleInputs[0].focus();
+        });
+    });
     this.auth.forEach(item => {
       item.addEventListener("change", event => {
         if (item.value.trim() == "") {
@@ -156,7 +179,7 @@ class View {
     });
     selectors.settingsLogoutButton.addEventListener("click", event => {
       event.preventDefault();
-      console.log("Сессия обнулена");
+      alert("Выход из учётной записи произведён успешно!");
       Launcher.SessionExit();
     });
     selectors.errorDisplayButton.addEventListener("click", event => {
