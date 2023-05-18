@@ -148,7 +148,7 @@ class View {
     this.googleInputs[0].addEventListener("click", () => {
       navigator.clipboard.readText()
         .then(text => {
-//        если
+//        если получить и прочесть буфер удалось
         this.googleCode = text;
         for (let i = 0; i != this.googleInputs.length; i++) {
           this.googleInputs[i].value = text[i];
