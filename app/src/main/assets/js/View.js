@@ -145,28 +145,34 @@ class View {
         Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
       }
     });
-    this.googleInputs[0].addEventListener("click", () => {
-      navigator.clipboard.readText()
-        .then(text => {
-//        если получить и прочесть буфер удалось
-        this.googleCode = text;
-        for (let i = 0; i != this.googleInputs.length; i++) {
-          this.googleInputs[i].value = text[i];
-        }
-        googleInputs[5].focus();
-        for (let i = 0; i < this.googleInputs.length; i++) {
-          this.googleInputs[i].setAttribute("disabled", "disabled");
-        }
-        let googleCodeNumber = Number(this.googleCode);
-        console.warn("Полученный код из буфера: " + googleCodeNumber);
-        let check = selectors.authCheckboxOrigin;
-        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
-        })
-        .catch(err => {
-          alert("Что-то пошло не так. Ошибка: " + err);
-          // вставка текста из буфера не удалась, стандартный сценарий
-          this.googleInputs[0].focus();
-        });
+    this.googleInputs.forEach(item => {
+      item.addEventListener("click", () => {
+        navigator.clipboard.readText()
+          .then(text => {
+            // если получить и прочесть буфер удалось
+            if (text !== "") {
+              this.googleCode = text;
+              for (let i = 0; i != this.googleInputs.length; i++) {
+                this.googleInputs[i].value = text[i];
+              }
+              this.googleInputs[5].focus();
+              for (let i = 0; i < this.googleInputs.length; i++) {
+                this.googleInputs[i].setAttribute("disabled", "disabled");
+              }
+              let googleCodeNumber = Number(this.googleCode);
+              console.warn("Полученный код из буфера: " + googleCodeNumber);
+              let check = selectors.authCheckboxOrigin;
+              Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
+            } else {
+              this.googleInputs[0].focus();
+            }
+          })
+          .catch(err => {
+            alert("Что-то пошло не так. Ошибка: " + err);
+            // вставка текста из буфера не удалась, стандартный сценарий
+            this.googleInputs[0].focus();
+          });
+       });
     });
     this.auth.forEach(item => {
       item.addEventListener("change", event => {
@@ -223,6 +229,9 @@ class View {
     this.newsCards.forEach(item => {
       item.addEventListener("click", event => {
         event.preventDefault();
+        if (selectors.characterSelectCustom.classList.contains("active")) {
+          this.mainSelectHide(this.selectors);
+        }
         selectors.tabMain.classList.remove(selectors.tabMain.classList[0] + this.active);
         selectors.tabNews.classList.add(selectors.tabNews.classList[0] + this.active);
         selectors.newsContent.classList.add("active");
@@ -232,6 +241,11 @@ class View {
         selectors.mainContent.classList.add("hidden");
         setTimeout(() => {
           selectors.mainContent.classList.add("dnone");
+          window.scroll({
+            left: 0,
+            top: 0,
+            behavior: "auto"
+          });
           // отложенный стейт контента таба
           selectors.newsContent.classList.remove("hidden");
         }, 300);
@@ -242,6 +256,10 @@ class View {
       item.addEventListener("click", event => {
         event.preventDefault();
         console.log("event.target = " + event.target.classList[1]);
+        if (selectors.characterSelectCustom.classList.contains("active")) {
+          this.mainSelectHide(this.selectors);
+        }
+
         if (event.target.classList[1] == selectors.tabMain.classList[1]) {
           if (!selectors.tabMain.classList.contains(selectors.tabMain.classList[0] + this.active)) {
             selectors.tabMain.classList.add(selectors.tabMain.classList[0] + this.active);
@@ -256,6 +274,11 @@ class View {
               selectors.newsContent.classList.add("hidden");
               selectors.settingsContent.classList.add("hidden");
               setTimeout(() => {
+                window.scroll({
+                  left: 0,
+                  top: 0,
+                  behavior: "auto"
+                });
                 selectors.newsContent.classList.add("dnone");
                 selectors.settingsContent.classList.remove("active");
                 selectors.settingsContent.classList.add("dnone");
@@ -278,6 +301,11 @@ class View {
               selectors.mainContent.classList.add("hidden");
               selectors.settingsContent.classList.add("hidden");
               setTimeout(() => {
+                window.scroll({
+                  left: 0,
+                  top: 0,
+                  behavior: "auto"
+                });
                 selectors.mainContent.classList.add("dnone");
                 selectors.settingsContent.classList.remove("active");
                 selectors.settingsContent.classList.add("dnone");
@@ -300,6 +328,11 @@ class View {
               selectors.mainContent.classList.add("hidden");
               selectors.newsContent.classList.add("hidden");
               setTimeout(() => {
+                window.scroll({
+                  left: 0,
+                  top: 0,
+                  behavior: "auto"
+                });
                 selectors.mainContent.classList.add("dnone");
                 selectors.newsContent.classList.remove("active");
                 selectors.newsContent.classList.add("dnone");
@@ -339,5 +372,16 @@ class View {
         }
       });
     });
+  }
+  mainSelectHide(selectors) {
+    selectors.characterSelectCustom.classList.remove("active");
+    selectors.startGameButton.classList.remove("hidden");
+    setTimeout(() => {
+      setTimeout(() => {
+        selectors.characterSelectContent.classList.add("dnone");
+      }, 150);
+      selectors.characterSelectContent.classList.remove("active");
+      selectors.characterSelectContent.classList.add("hidden");
+    }, 50);
   }
 }
