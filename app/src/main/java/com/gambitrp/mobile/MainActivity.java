@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setDomStorageEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
         webView.setWebViewClient(new WebClient());
         webView.setWebChromeClient(new ChromeClient());
@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
         if (webView != null) {
             webView.removeAllViews();
             webView.clearHistory();
-            webView.clearCache(true);
+            webView.clearCache(false);
             webView.pauseTimers();
             webView.destroyDrawingCache();
             webView.destroy();
