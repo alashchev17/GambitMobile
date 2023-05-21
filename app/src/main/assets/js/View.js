@@ -179,7 +179,7 @@ class View {
         }
         console.log("Буфер обмена: " + clipboard);
         console.log("Длина буфера: " + clipboard.length);
-        if (clipboard !== null && clipboard.length == 6 && typeof Number(clipboard) !== NaN) {
+        if (clipboard !== null && clipboard.length == 6 && typeof clipboard !== "string") {
           // если буфер обмена не пуст, и его длина 6 символов, и это число, то...
           if (clipboard[0] !== "0") {
             // если первое число буфера не равно нулю, то...
@@ -219,7 +219,7 @@ class View {
           this.googleInputs[0].focus();
         } else {
           // если буфера обмена нет, то...
-          console.log("Буфер обмена пуст!");
+          console.log("Буфер обмена либо строка, либо отсутствует!");
           this.googleInputs[0].focus();
         }
       });
