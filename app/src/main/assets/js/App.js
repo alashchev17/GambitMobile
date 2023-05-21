@@ -143,7 +143,7 @@ class App extends View {
             this.googleInputs[i].value = "";
             this.googleInputs[i].removeAttribute("disabled", "disabled");
           }
-          this.googleCode = "";
+          this.sendCode = "";
           this.googleInputs[0].focus();
         }, 1500);
         break;
@@ -157,7 +157,7 @@ class App extends View {
             this.googleInputs[i].value = "";
             this.googleInputs[i].removeAttribute("disabled", "disabled");
           }
-          this.googleCode = "";
+          this.sendCode = "";
           this.googleInputs[0].focus();
         }, 1500);
         break;

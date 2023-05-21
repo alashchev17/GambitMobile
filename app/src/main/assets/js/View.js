@@ -43,7 +43,7 @@ class View {
   error = "--error";
   access = "--access";
   displayName = undefined;
-  googleCode = "";
+  sendCode = "";
   auth = document.querySelectorAll(".auth-display__input");
   googleInputs = document.querySelectorAll(".google-display__input");
   newsCards = document.querySelectorAll(".main-display__card");
@@ -136,43 +136,50 @@ class View {
     this.googleInputs[5].addEventListener("keyup", () => {
       if (this.googleInputs[5].value !== "") {
         for (let i = 0; i < this.googleInputs.length; i++) {
-          this.googleCode += this.googleInputs[i].value;
+          this.sendCode += this.googleInputs[i].value;
           this.googleInputs[i].setAttribute("disabled", "disabled");
         }
-        let googleCodeNumber = Number(this.googleCode);
-        console.warn(googleCodeNumber);
+        let sendCodeNumber = Number(this.sendCode);
+        console.warn(sendCodeNumber);
         let check = selectors.authCheckboxOrigin;
-        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
+        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
       }
     });
     this.googleInputs.forEach(item => {
       item.addEventListener("click", () => {
-        navigator.clipboard.readText()
-          .then(text => {
-            // если получить и прочесть буфер удалось
-            if (text !== "") {
-              this.googleCode = text;
-              for (let i = 0; i != this.googleInputs.length; i++) {
-                this.googleInputs[i].value = text[i];
-              }
-              this.googleInputs[5].focus();
-              for (let i = 0; i < this.googleInputs.length; i++) {
-                this.googleInputs[i].setAttribute("disabled", "disabled");
-              }
-              let googleCodeNumber = Number(this.googleCode);
-              console.warn("Полученный код из буфера: " + googleCodeNumber);
-              let check = selectors.authCheckboxOrigin;
-              Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, googleCodeNumber);
-            } else {
-              this.googleInputs[0].focus();
-            }
-          })
-          .catch(err => {
-            alert("Что-то пошло не так. Ошибка: " + err);
-            // вставка текста из буфера не удалась, стандартный сценарий
-            this.googleInputs[0].focus();
-          });
-       });
+        let clipboard = Launcher.getClipboardData();
+        if (item.classList.contains(item.classList[0] + this.error)) {
+          for (let i = 0; i < this.googleInputs.length; i++) {
+            this.googleInputs[i].classList.toggle(this.googleInputs[i].classList[0] + this.error);
+          }
+          selectors.googleError.classList.remove(selectors.googleError.classList[0] + this.active);
+        }
+        console.log("Буфер обмена: " + clipboard);
+        console.log("Длина буфера: " + clipboard.length);
+        if (clipboard !== null && clipboard.length == 6) {
+          // если буфер обмена не пуст и его длина 6 символов, то...
+          this.sendCode = clipboard;
+          for (let i = 0; i != this.googleInputs.length; i++) {
+            this.googleInputs[i].value = clipboard[i];
+          }
+          this.googleInputs[5].focus();
+          for (let i = 0; i < this.googleInputs.length; i++) {
+            this.googleInputs[i].setAttribute("disabled", "disabled");
+          }
+          let sendCodeNumber = Number(this.sendCode);
+          console.warn("Полученный код из буфера: " + sendCodeNumber);
+          let check = selectors.authCheckboxOrigin;
+          Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
+        } else if (clipboard.length !== 6) {
+          // если буфер обмена меньше или больше 6 символов, то...
+          console.log("Длина буфера обмена на равна 6!");
+          this.googleInputs[0].focus();
+        } else {
+          // если буфера обмена нет, то...
+          console.log("Буфер обмена пуст!");
+          this.googleInputs[0].focus();
+        }
+      });
     });
     this.auth.forEach(item => {
       item.addEventListener("change", event => {
