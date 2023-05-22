@@ -105,6 +105,14 @@ class View {
     selectors.googleReturnButton.addEventListener("click", event => {
       event.preventDefault();
       this.display = "auth";
+      if (selectors.googleError.classList.contains(selectors.googleError.classList[0] + this.active)) {
+        selectors.googleError.classList.remove(selectors.googleError.classList[0] + this.active);
+        if (this.googleInputs[0].classList.contains(this.googleInputs[0].classList[0] + this.error)) {
+          for (let i = 0; i < this.googleInputs.length; i++) {
+            this.googleInputs[i].classList.remove(this.googleInputs[i].classList[0] + this.error);
+          }
+        }
+      }
     });
     selectors.notificationClose.addEventListener("click", event => {
       event.preventDefault();
@@ -139,10 +147,25 @@ class View {
           this.sendCode += this.googleInputs[i].value;
           this.googleInputs[i].setAttribute("disabled", "disabled");
         }
-        let sendCodeNumber = Number(this.sendCode);
-        console.warn(sendCodeNumber);
-        let check = selectors.authCheckboxOrigin;
-        Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
+        console.log(this.sendCode[0]);
+        if (this.sendCode[0] == "0") {
+          setTimeout(() => {
+            for (let i = 0; i < this.googleInputs.length; i++) {
+              this.googleInputs[i].classList.add(this.googleInputs[i].classList[0] + this.error);
+              this.googleInputs[i].value = "";
+              this.googleInputs[i].removeAttribute("disabled");
+            }
+            selectors.googleError.textContent = "Неверный код!";
+            selectors.googleError.classList.add(selectors.googleError.classList[0] + this.active);
+            this.sendCode = "";
+            this.googleInputs[0].focus();
+          }, 1500);
+        } else if (this.sendCode[0] != "0") {
+          let sendCodeNumber = Number(this.sendCode);
+          console.warn(sendCodeNumber);
+          let check = selectors.authCheckboxOrigin;
+          Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
+        }
       }
     });
     this.googleInputs.forEach(item => {
@@ -156,27 +179,49 @@ class View {
         }
         console.log("Буфер обмена: " + clipboard);
         console.log("Длина буфера: " + clipboard.length);
-        if (clipboard !== null && clipboard.length == 6) {
-          // если буфер обмена не пуст и его длина 6 символов, то...
-          this.sendCode = clipboard;
-          for (let i = 0; i != this.googleInputs.length; i++) {
-            this.googleInputs[i].value = clipboard[i];
+        let clipboardNumber = Number(clipboard);
+        console.log("Является ли буфер строчкой: " + isNaN(clipboardNumber));
+        if (clipboard !== null && clipboard.length == 6 && !isNaN(clipboardNumber)) {
+          // если буфер обмена не пуст, и его длина 6 символов, и это число, то...
+          if (clipboard[0] !== "0") {
+            // если первое число буфера не равно нулю, то...
+            this.sendCode = clipboard;
+            for (let i = 0; i != this.googleInputs.length; i++) {
+              this.googleInputs[i].value = clipboard[i];
+            }
+            this.googleInputs[5].focus();
+            for (let i = 0; i < this.googleInputs.length; i++) {
+              this.googleInputs[i].setAttribute("disabled", "disabled");
+            }
+            let sendCodeNumber = Number(this.sendCode);
+            console.warn("Полученный код из буфера: " + sendCodeNumber);
+            let check = selectors.authCheckboxOrigin;
+            Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
+          } else {
+            // если всё-таки равно нулю, то...
+            for (let i = 0; i != this.googleInputs.length; i++) {
+              this.googleInputs[i].value = clipboard[i];
+              this.googleInputs[i].setAttribute("disabled", "disabled");
+            }
+            this.googleInputs[5].focus();
+            setTimeout(() => {
+              selectors.googleError.textContent = "Неверный код!";
+              for (let i = 0; i < this.googleInputs.length; i++) {
+                this.googleInputs[i].classList.add(this.googleInputs[i].classList[0] + this.error);
+                this.googleInputs[i].value = "";
+                this.googleInputs[i].removeAttribute("disabled");
+              }
+              selectors.googleError.classList.add(selectors.googleError.classList[0] + this.active);
+              this.googleInputs[0].focus();
+            }, 1500);
           }
-          this.googleInputs[5].focus();
-          for (let i = 0; i < this.googleInputs.length; i++) {
-            this.googleInputs[i].setAttribute("disabled", "disabled");
-          }
-          let sendCodeNumber = Number(this.sendCode);
-          console.warn("Полученный код из буфера: " + sendCodeNumber);
-          let check = selectors.authCheckboxOrigin;
-          Launcher.auth(this.auth[0].value.trim(), this.auth[1].value.trim(), check.checked, sendCodeNumber);
         } else if (clipboard.length !== 6) {
           // если буфер обмена меньше или больше 6 символов, то...
           console.log("Длина буфера обмена на равна 6!");
           this.googleInputs[0].focus();
         } else {
           // если буфера обмена нет, то...
-          console.log("Буфер обмена пуст!");
+          console.log("Буфер обмена либо строка, либо отсутствует!");
           this.googleInputs[0].focus();
         }
       });
