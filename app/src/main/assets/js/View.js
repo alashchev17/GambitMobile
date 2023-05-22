@@ -179,7 +179,9 @@ class View {
         }
         console.log("Буфер обмена: " + clipboard);
         console.log("Длина буфера: " + clipboard.length);
-        if (clipboard !== null && clipboard.length == 6 && typeof clipboard !== "string") {
+        let clipboardNumber = Number(clipboard);
+        console.log("Является ли буфер строчкой: " + isNaN(clipboardNumber));
+        if (clipboard !== null && clipboard.length == 6 && !isNaN(clipboardNumber)) {
           // если буфер обмена не пуст, и его длина 6 символов, и это число, то...
           if (clipboard[0] !== "0") {
             // если первое число буфера не равно нулю, то...
