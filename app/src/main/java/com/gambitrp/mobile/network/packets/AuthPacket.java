@@ -1,9 +1,17 @@
 package com.gambitrp.mobile.network.packets;
 
+import static com.gambitrp.mobile.network.packets.PacketError.SESSION_EXPIRED;
+import static com.gambitrp.mobile.network.packets.PacketError.USERNAME_OR_SESSION_NULL;
+
+import com.gambitrp.mobile.core.Config;
 import com.gambitrp.mobile.core.Window;
+import com.gambitrp.mobile.core.configs.LauncherConfig;
 import com.gambitrp.mobile.network.data.Session;
+import com.gambitrp.mobile.network.packets.handlers.Handler;
 
 import org.json.simple.JSONObject;
+
+import java.util.UUID;
 
 public class AuthPacket implements Packet {
     private final int typeTwoFactor = 1;
@@ -16,8 +24,8 @@ public class AuthPacket implements Packet {
         String signatureToken = (String) data.get("token");
         String authToken = (String) data.get("session_token");
 
-        Session.getInstance().setToken(Session.SessionType.SIGNATURE_TOKEN, signatureToken);
-        Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, authToken);
+        Session.getInstance().setToken(Session.SessionType.SIGNATURE_TOKEN, signatureToken, false);
+        Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, authToken, true);
 
         if (signatureToken == null || signatureToken.isBlank()) {
             data.clear();
@@ -40,7 +48,29 @@ public class AuthPacket implements Packet {
 
     @Override
     public void error(PacketError error) {
-        Window.getContext().javaScriptCall("v.launcherError", error.getValue(), error.getDescription());
+        Config<LauncherConfig> cfg = Window.getContext().getConfig();
+
+        switch (error) {
+            case USERNAME_OR_SESSION_NULL:
+            case SESSION_EXPIRED: {
+                LauncherConfig data = cfg.getData();
+
+                if(data.authToken != null || error == SESSION_EXPIRED) {
+                    Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, (UUID) null, true);
+
+                    Window.getContext().javaScriptCall("v.displaysInit");
+                } else {
+                    Window.getContext().javaScriptCall("v.launcherError",
+                            USERNAME_OR_SESSION_NULL.getValue(),
+                            USERNAME_OR_SESSION_NULL.getDescription());
+                }
+
+                break;
+            }
+            default: {
+                Window.getContext().javaScriptCall("v.launcherError", error.getValue(), error.getDescription());
+            }
+        }
 
         System.out.println("[CLIENT] error: " + error);
     }

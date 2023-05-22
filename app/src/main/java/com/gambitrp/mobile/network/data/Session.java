@@ -4,6 +4,8 @@ import com.gambitrp.mobile.core.Config;
 import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 
+import org.json.simple.parser.ParseException;
+
 import java.util.UUID;
 
 public class Session {
@@ -23,23 +25,34 @@ public class Session {
 
     public String getToken(SessionType type) {
         switch (type) {
-            case SIGNATURE_TOKEN: return signatureToken != null ? signatureToken.toString() : "";
-            case AUTH_TOKEN: return authToken != null ? authToken.toString() : "";
+            case SIGNATURE_TOKEN:
+                return signatureToken != null ? signatureToken.toString() : "";
+            case AUTH_TOKEN:
+                return authToken != null ? authToken.toString() : "";
         }
 
         return null;
     }
 
-    public void setToken(SessionType type, String token) {
-        if (token == null || token.isBlank()) {
+    public void setToken(SessionType type, String token, boolean save) {
+        if (!save && (token == null || token.isBlank())) {
             return;
         }
 
         switch (type) {
-            case SIGNATURE_TOKEN: signatureToken = UUID.fromString(token);
+            case SIGNATURE_TOKEN:
+                signatureToken = UUID.fromString(token);
                 break;
             case AUTH_TOKEN: {
-                authToken = UUID.fromString(token);
+                try {
+                    authToken = UUID.fromString(token);
+                } catch (IllegalArgumentException e) {
+                    return;
+                }
+
+                if (!save) {
+                    return;
+                }
 
                 Config<LauncherConfig> cfg = Window.getContext().getConfig();
 
@@ -51,16 +64,29 @@ public class Session {
         }
     }
 
-    public void setToken(SessionType type, UUID token) {
-        if (token == null) {
+    public void setToken(SessionType type, UUID token, boolean save) {
+        if (!save && token == null) {
             return;
         }
 
         switch (type) {
-            case SIGNATURE_TOKEN: signatureToken = token;
+            case SIGNATURE_TOKEN:
+                signatureToken = token;
                 break;
-            case AUTH_TOKEN: authToken = token;
+            case AUTH_TOKEN: {
+                authToken = token;
+
+                if (!save) {
+                    return;
+                }
+
+                Config<LauncherConfig> cfg = Window.getContext().getConfig();
+
+                cfg.getData().authToken = authToken;
+                cfg.saveData();
+
                 break;
+            }
         }
     }
 

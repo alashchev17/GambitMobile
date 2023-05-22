@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "789059809044",
+    "project_id": "gambitrp-5a7a4",
+    "storage_bucket": "gambitrp-5a7a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789059809044:android:6d8df0e22719f2e9095c01",
+        "android_client_info": {
+          "package_name": "com.gambitrp.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789059809044-6jb6i5bv6nmadq8de8tsgclq0aps58sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxPYzEX8b2_UuxV8k8xYVB5sTrR9pRzHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789059809044-6jb6i5bv6nmadq8de8tsgclq0aps58sm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

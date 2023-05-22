@@ -14,7 +14,7 @@ public class ConnectedState implements State {
         LauncherConfig data = cfg.getData();
 
         if(data.authToken != null) {
-            Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, data.authToken);
+            Session.getInstance().setToken(Session.SessionType.AUTH_TOKEN, data.authToken, false);
 
             Handler handler = PacketID.AUTH.getHandler();
             handler.setData("session", data.authToken.toString());
