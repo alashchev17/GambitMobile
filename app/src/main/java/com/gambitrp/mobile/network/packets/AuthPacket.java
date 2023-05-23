@@ -7,7 +7,6 @@ import com.gambitrp.mobile.core.Config;
 import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 import com.gambitrp.mobile.network.data.Session;
-import com.gambitrp.mobile.network.packets.handlers.Handler;
 
 import org.json.simple.JSONObject;
 

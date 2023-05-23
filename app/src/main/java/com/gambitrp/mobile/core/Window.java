@@ -7,6 +7,7 @@ import android.webkit.WebView;
 import com.gambitrp.mobile.MainActivity;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 import com.gambitrp.mobile.network.WebSocket;
+import com.google.firebase.FirebaseApp;
 
 import java.lang.ref.WeakReference;
 
@@ -19,7 +20,11 @@ public class Window extends Application {
     public void onCreate() {
         super.onCreate();
 
-        context = new WeakReference<>(getApplicationContext());
+        Context context = getApplicationContext();
+
+        FirebaseApp.initializeApp(context);
+
+        Window.context = new WeakReference<>(context);
     }
 
     @Override

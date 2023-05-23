@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         window.setStatusBarColor(Color.TRANSPARENT);
 
         view.setOnSystemUiVisibilityChangeListener(visibility -> {
-            if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
                 view.setSystemUiVisibility(windowFlags);
             }
         });

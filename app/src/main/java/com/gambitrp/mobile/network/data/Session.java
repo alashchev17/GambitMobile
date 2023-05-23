@@ -4,8 +4,6 @@ import com.gambitrp.mobile.core.Config;
 import com.gambitrp.mobile.core.Window;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 
-import org.json.simple.parser.ParseException;
-
 import java.util.UUID;
 
 public class Session {
