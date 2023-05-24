@@ -11,82 +11,70 @@ import androidx.annotation.RequiresApi;
 public class Permissions {
     private static final String prefs = "GambitMobilePrefs";
 
-    private static boolean shouldAskPermission() {
+    public interface PermissionResponse {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        default void request(Window window, String permission) {
+            window.getActivity().requestPermissions(new String[] { permission }, 1);
+        }
+
+        default void denied() {
+        }
+
+        default void disabled() {
+        }
+
+        default void allowed() {
+        }
+    }
+
+    private static boolean isNeedPermission() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
     }
 
-    private static boolean shouldAskPermission(String permission) {
-        if (shouldAskPermission()) {
+    private static boolean isNeedPermission(String permission) {
+        if (isNeedPermission()) {
             Window window = Window.getContext();
 
-            int permissionResult = window.checkSelfPermission(permission);
+            int ret = window.checkSelfPermission(permission);
 
-            return permissionResult != PackageManager.PERMISSION_GRANTED;
+            return ret != PackageManager.PERMISSION_GRANTED;
         }
 
         return false;
     }
 
-    private static void firstTimeAskingPermission(String permission, boolean isFirstTime) {
+    private static void firstRequestPermission(String permission, boolean first) {
         Window window = Window.getContext();
 
-        SharedPreferences sharedPreference = window.getSharedPreferences(prefs, MODE_PRIVATE);
+        SharedPreferences data = window.getSharedPreferences(prefs, MODE_PRIVATE);
 
-        sharedPreference.edit().putBoolean(permission, isFirstTime).apply();
+        data.edit().putBoolean(permission, first).apply();
     }
 
-    private static boolean isFirstTimeAskingPermission(String permission) {
+    private static boolean isFirstRequestPermission(String permission) {
         Window window = Window.getContext();
 
         return window.getSharedPreferences(prefs, MODE_PRIVATE).getBoolean(permission, true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static void checkPermission(String permission, PermissionAskListener listener) {
+    public static void check(String permission, PermissionResponse response) {
         Window window = Window.getContext();
 
-        System.out.println("[CLIENT] checkPermission");
-
-        if (shouldAskPermission(permission)) {
-            System.out.println("[CLIENT] shouldAskPermission");
-
+        if (isNeedPermission(permission)) {
             if (window.getActivity().shouldShowRequestPermissionRationale(permission)) {
-                System.out.println("[CLIENT] shouldShowRequestPermissionRationale");
-
-                listener.onPermissionPreviouslyDenied();
+                response.denied();
             } else {
-                System.out.println("[CLIENT] else");
+                if (isFirstRequestPermission(permission)) {
+                    firstRequestPermission(permission, false);
 
-                if (isFirstTimeAskingPermission(permission)) {
-                    System.out.println("[CLIENT] isFirstTimeAskingPermission");
-
-                    firstTimeAskingPermission(permission, false);
-
-                    listener.onPermissionAsk();
+                    response.request(window, permission);
                 } else {
-                    System.out.println("[CLIENT] else");
-
-                    listener.onPermissionDisabled();
+                    response.disabled();
                 }
             }
         } else {
-            System.out.println("[CLIENT] else");
-
-            listener.onPermissionGranted();
-        }
-    }
-
-    public interface PermissionAskListener {
-        default void onPermissionAsk() {
-        }
-
-        default void onPermissionPreviouslyDenied() {
-        }
-
-        default void onPermissionDisabled() {
-        }
-
-        default void onPermissionGranted() {
+            response.allowed();
         }
     }
 }

@@ -42,14 +42,9 @@ public class Push extends FirebaseMessagingService {
 
                 System.out.println("[CLIENT] onMessageReceived: " + remoteMessage);
 
-                Permissions.checkPermission(Manifest.permission.POST_NOTIFICATIONS, new Permissions.PermissionAskListener() {
+                Permissions.check(Manifest.permission.POST_NOTIFICATIONS, new Permissions.PermissionResponse() {
                     @Override
-                    public void onPermissionAsk() {
-                        Window.getContext().getActivity().requestPermissions(new String[] { Manifest.permission.POST_NOTIFICATIONS }, 1);
-                    }
-
-                    @Override
-                    public void onPermissionGranted() {
+                    public void allowed() {
                         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
                         if (notification == null) {
