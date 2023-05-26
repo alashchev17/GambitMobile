@@ -1,5 +1,7 @@
 package com.gambitrp.mobile.core.notifications;
 
+import static kotlin.random.RandomKt.Random;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -24,7 +26,7 @@ import java.util.concurrent.Semaphore;
 public class Push extends FirebaseMessagingService {
     private final Semaphore semaphoreMsg = new Semaphore(1);
 
-    private final String channel = "GambitMobileID";
+    private static final String channel = "GambitMobileID";
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -66,31 +68,33 @@ public class Push extends FirebaseMessagingService {
     }
 
     @SuppressLint("MissingPermission")
-    private void send(String header, String body) {
+    public static void send(String header, String body) {
         Window window = Window.getContext();
 
+        int id = Random(System.currentTimeMillis()).nextInt(10000);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(this.channel, "Gambit Mobile", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(Push.channel, "Gambit Mobile", NotificationManager.IMPORTANCE_HIGH);
 
-            getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            window.getSystemService(NotificationManager.class).createNotificationChannel(channel);
 
-            Notification.Builder notification = new Notification.Builder(window, this.channel)
+            Notification.Builder notification = new Notification.Builder(window, Push.channel)
                     .setContentTitle(header)
                     .setContentText(body)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setAutoCancel(true);
 
-            NotificationManagerCompat.from(window).notify(1, notification.build());
+            NotificationManagerCompat.from(window).notify(id, notification.build());
         } else {
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(window, this.channel)
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(window, channel)
                     .setContentTitle(header)
                     .setContentText(body)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setAutoCancel(true);
 
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) window.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            manager.notify(1, notification.build());
+            manager.notify(id, notification.build());
         }
     }
 }

@@ -2,12 +2,14 @@ package com.gambitrp.mobile.network.packets;
 
 import com.gambitrp.mobile.network.packets.handlers.AuthHandler;
 import com.gambitrp.mobile.network.packets.handlers.Handler;
+import com.gambitrp.mobile.network.packets.handlers.NotifyHandler;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum PacketID {
-    AUTH(1, new AuthPacket(), new AuthHandler());
+    AUTH(1, new AuthPacket(), new AuthHandler()),
+    NOTIFY(2, new NotifyPacket(), new NotifyHandler());
 
     private final int id;
     private final Packet packet;
