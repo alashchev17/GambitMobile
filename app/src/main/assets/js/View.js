@@ -282,7 +282,7 @@ class View {
       item.addEventListener("click", event => {
         event.preventDefault();
         if (selectors.characterSelectCustom.classList.contains("active")) {
-          this.mainSelectHide(this.selectors);
+          this.mainSelectHide(selectors);
         }
         selectors.tabMain.classList.remove(selectors.tabMain.classList[0] + this.active);
         selectors.tabNews.classList.add(selectors.tabNews.classList[0] + this.active);
@@ -309,7 +309,7 @@ class View {
         event.preventDefault();
         console.log("event.target = " + event.target.classList[1]);
         if (selectors.characterSelectCustom.classList.contains("active")) {
-          this.mainSelectHide(this.selectors);
+          this.mainSelectHide(selectors);
         }
 
         if (event.target.classList[1] == selectors.tabMain.classList[1]) {
