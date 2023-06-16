@@ -97,7 +97,7 @@
       <div id="tabMain" class="main-content active">
         <div class="container">
           <div class="main-display__row jc-sb">
-            <h1 class="main-display__title">Привет, <span id="nickname">GitHub.</span>!</h1>
+            <h1 class="main-display__title">Привет, <span id="nickname"></span>!</h1>
             <a href="#" class="main-display__notification"></a>
           </div>
           <!-- /.main-display__row -->
@@ -163,36 +163,12 @@
           <div class="container">
             <div class="notification-content__row">
               <a href="#" class="notification-content__link notification-content__link--close">Закрыть</a>
-              <h2 class="notification-content__title">Уведомления</h2>
+              <h2 class="notification-content__header">Уведомления</h2>
               <a href="#" class="notification-content__link" id="notificationRead">Прочитать</a>
             </div>
             <!-- /.notification-content__row -->
             <div class="notification-content__cards">
-              <a href="#" class="notification-card notification-content__card notification-card--active">
-                <span class="notification-card__date">Вчера</span>
-                <p class="notification-card__info">Ваш персонаж <span class="notification-card__character">Scally Milano</span> получил ретест</p>
-              </a>
-              <!-- /.notification-content__card -->
-              <a href="#" class="notification-card notification-content__card notification-card--active">
-                <span class="notification-card__date">Вчера</span>
-                <p class="notification-card__info">Ваш персонаж <span class="notification-card__character">Jessica Marshall</span> получил игровую блокировку на <span class="notification-card__ban">15 лет</span> по причине: <span class="notification-card__reason">ООС махинации</span></p>
-              </a>
-              <!-- /.notification-content__card -->
-              <a href="#" class="notification-card notification-content__card">
-                <span class="notification-card__date">Вчера</span>
-                <p class="notification-card__info">Ваш персонаж <span class="notification-card__character">Scally Milano</span> получил ретест</p>
-              </a>
-              <!-- /.notification-content__card -->
-              <a href="#" class="notification-card notification-content__card">
-                <span class="notification-card__date">Вчера</span>
-                <p class="notification-card__info">Ваш персонаж <span class="notification-card__character">Scally Milano</span> получил ретест</p>
-              </a>
-              <!-- /.notification-content__card -->
-              <a class="notification-card notification-content__card">
-                <span class="notification-card__date">Вчера</span>
-                <p class="notification-card__info">Ваш персонаж <span class="notification-card__character">Scally Milano</span> получил ретест</p>
-              </a>
-              <!-- /.notification-content__card -->
+              <h2 class="notification-content__title">Уведомлений нет</h2>
             </div>
             <!-- /.notification-content__cards -->
           </div>
@@ -278,7 +254,7 @@
   <!-- /.root -->
   <script src="./js/View.js"  type="text/javascript"></script>
   <script src="./js/App.js" type="text/javascript"></script>
-  <script>
+  <script type="text/javascript">
     v = new App();
 
     function showHidePassword(target){

@@ -25,6 +25,7 @@ class View {
     characterSelectList: ".main-display__select-list",
     startGameButton: ".main-display__button",
     notificationDisplay: ".notification-content",
+    notificationCardsBlock: ".notification-content__cards",
     notificationOpen: ".main-display__notification",
     notificationClose: ".notification-content__link--close",
     notificationRead: "#notificationRead",
@@ -114,6 +115,11 @@ class View {
         }
       }
     });
+    selectors.startGameButton.addEventListener("click", event => {
+      if (!selectors.startGameButton.hasAttribute("disabled")) {
+        alert("Подключение на сервер возможно, запуск клиента.");
+      }
+    });
     selectors.notificationClose.addEventListener("click", event => {
       event.preventDefault();
       selectors.notificationDisplay.classList.add(selectors.notificationDisplay.classList[0] + this.hidden);
@@ -137,7 +143,8 @@ class View {
     selectors.notificationRead.addEventListener("click", event => {
       event.preventDefault();
       selectors.notificationRead.classList.remove(selectors.notificationRead.classList[0] + this.active);
-      this.notificationCards.forEach(item => item.classList.remove(item.classList[0] + this.active));
+      let notificationCards = document.querySelectorAll(".notification-card");
+      notificationCards.forEach(item => item.classList.remove(item.classList[0] + this.active));
       selectors.notificationClose.classList.remove(selectors.notificationClose.classList[0] + this.active);
       selectors.notificationOpen.classList.remove(selectors.notificationOpen.classList[0] + this.active);
     });

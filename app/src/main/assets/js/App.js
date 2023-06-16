@@ -2,12 +2,6 @@ class App extends View {
   #session = null;
   #loadTime = 0;
   #minLoadTime = 3000;
-  // login(input, check) {
-  //   let login = input[0];
-  //   let password = input[1];
-
-  //   let response = AppAction.login(login, password, check);
-  // }
   constructor() {
     super();
     this.displaysInit();
@@ -27,15 +21,18 @@ class App extends View {
         this.display = "intro";
       }
     }
-   /* if (this.displayName == undefined) {
-      this.display = "first";
-      setTimeout(() => {
-        this.display = this.#loadDiplay;
-      }, 3500);
-    } else {
-      this.#loadDiplay = 'intro';
-    }*/
-
+  }
+  timeConverter(UNIX_timestamp) {
+      let a = new Date(UNIX_timestamp * 1000);
+      let months = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+      let year = a.getFullYear();
+      let month = months[a.getMonth()];
+      let date = a.getDate();
+      let hour = a.getHours();
+      let min = a.getMinutes();
+      let sec = a.getSeconds();
+      let time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
+      return time;
     }
   checkboxData(selectors) {
     selectors.checkboxSpan.addEventListener("click", () => {
@@ -87,19 +84,21 @@ class App extends View {
           }
           this.selectors.googleError.classList.add(this.selectors.googleError.classList[0] + this.access);
         }, 1500);
-        for (let i = 0; i != response.characters.length; i++) {
-          this.characterSelectOrigin.innerHTML += `
-            <option class="main-display__select-options" value=${response.characters[i].name}>${response.characters[i].name}</option>
-          `;
-          this.selectors.characterSelectList.innerHTML += `
-            <li class="main-display__select-item" data-game=${response.characters[i].game}>
-              <img src="./images/character-image.png" alt="#" class="main-display__select-image">
-              <div class="main-display__select-info">
-                <span class="main-display__select-name">${response.characters[i].name}</span>
-                <span class="main-display__select-status">${response.characters[i].status}</span>
-              </div>
-            </li>
-          `;
+        if (response.characters !== null) {
+          for (let i = 0; i != response.characters.length; i++) {
+            this.characterSelectOrigin.innerHTML += `
+              <option class="main-display__select-options" value=${response.characters[i].name}>${response.characters[i].name}</option>
+            `;
+            this.selectors.characterSelectList.innerHTML += `
+              <li class="main-display__select-item" data-game=${response.characters[i].game}>
+                <img src="./images/character-image.png" alt="#" class="main-display__select-image">
+                <div class="main-display__select-info">
+                  <span class="main-display__select-name">${response.characters[i].name}</span>
+                  <span class="main-display__select-status">${response.characters[i].status}</span>
+                </div>
+              </li>
+            `;
+          }
         }
         let characterSelectItemsNew = document.querySelectorAll(".main-display__select-item");
         let characterSelectItemsNewArray = Array.prototype.slice.call(characterSelectItemsNew);
@@ -109,6 +108,43 @@ class App extends View {
         console.log(characterSelectItemsNew);
         console.log(characterSelectOriginOptionsNew);
         this.mainSelectHandler(this.selectors, characterSelectItemsNewArray, characterSelectOriginOptionsNew, characterSelectNameNew);
+
+//        this.selectors.notificationCardsBlock.innerHTML = `
+//          <h2 class="notification-content__title">Уведомлений нет</h2>
+//        `;
+//        this.selectors.notificationRead.classList.remove(this.selectors.notificationRead.classList[0] + this.active);
+//        this.selectors.notificationOpen.classList.remove(this.selectors.notificationOpen.classList[0] + this.active);
+        break;
+      case 3:
+        // парсим response и подгружаем уведомления
+        let notificationResponse = JSON.parse(data);
+        console.log("Данные третьего кейса: ", notificationResponse);
+
+        for (let i = 0; i != notificationResponse.length; i++) {
+          let date = this.timeConverter(notificationResponse[i].date);
+          this.selectors.notificationCardsBlock.innerHTML += `
+            <a href="#" class="notification-card notification-content__card">
+              <span class="notification-card__date">${date}</span>
+              <p class="notification-card__info">${notificationResponse[i].text}</p>
+            </a>
+            <!-- /.notification-content__card -->
+          `;
+        }
+        if (notificationResponse.some(item => item.status == -1)) {
+          this.selectors.notificationOpen.classList.add(this.selectors.notificationOpen.classList[0] + this.active);
+          this.selectors.notificationRead.classList.add(this.selectors.notificationRead.classList[0] + this.active);
+        } else {
+          this.selectors.notificationOpen.classList.remove(this.selectors.notificationOpen.classList[0] + this.active);
+          this.selectors.notificationRead.classList.remove(this.selectors.notificationRead.classList[0] + this.active);
+        }
+        let notifications = document.querySelectorAll(".notification-card");
+        for (let i = 0; i != notifications.length; i++) {
+          if (notificationResponse[i].status == -1) {
+            notifications[i].classList.add("notification-card--active");
+          }
+        }
+        this.notificationCardsArray = Array.prototype.slice.call(notifications);
+        this.notificationsHandler(this.selectors);
         break;
     }
   }
@@ -179,11 +215,11 @@ class App extends View {
           selectors.startGameButton.classList.remove("active");
           setTimeout(() => {
             setTimeout(() => {
-              selectors.characterSelectContent.classList.toggle("dnone");
-            }, 150)
-            selectors.characterSelectContent.classList.toggle("active");
-            selectors.characterSelectContent.classList.toggle("hidden");
-          }, 50);
+              selectors.characterSelectContent.classList.toggle("active");
+              selectors.characterSelectContent.classList.toggle("hidden");
+            }, 150);
+            selectors.characterSelectContent.classList.toggle("dnone");
+          }, 150);
         } else {
           selectors.characterSelectContent.classList.toggle("active");
           selectors.characterSelectContent.classList.toggle("hidden");
@@ -245,4 +281,5 @@ class App extends View {
   get time() {
     return new Date().getTime();
   }
+
 }

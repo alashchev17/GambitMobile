@@ -136,8 +136,7 @@
         opacity: 1
         visibility: visible
       &.dnone
-        position: absolute
-        width: 100%
+        display: none
     &-title
       font-weight: 500
       font-size: 16px
@@ -290,13 +289,19 @@
       align-items: center
       justify-content: space-between
       margin-bottom: 18px
-    &__title
+    &__header
       font-weight: 600
       font-size: 19px
       line-height: 216%
       letter-spacing: -0.408px
       color: $white
-      justify-self: center
+    &__title
+      font-weight: 700
+      font-size: 22px
+      line-height: 216%
+      letter-spacing: -0.408px
+      color: $white
+      align-self: center
     &__link
       font-weight: 400
       font-size: 17px
