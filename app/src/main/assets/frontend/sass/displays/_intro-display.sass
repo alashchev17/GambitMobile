@@ -1,0 +1,56 @@
+.intro-display
+  opacity: 0
+  visibility: hidden
+  padding: 55px 20px 34px 20px
+  height: 100vh
+  background-color: $second-accent-color
+  position: relative
+  transition: all 0.3s
+  display: flex
+  flex-direction: column
+  align-items: center
+  overflow: hidden
+  &--dnone
+    display: none
+  &--active
+    opacity: 1
+    visibility: visible
+  &--hidden
+    opacity: 0
+    visibility: hidden
+  &__background
+    background-image: url("../images/intro-background.png")
+    background-repeat: no-repeat
+    background-size: cover
+    background-position: center bottom
+    width: 631px
+    height: 474px
+    margin-bottom: 22px
+  &__title
+    font-weight: 400
+    font-size: 34px
+    line-height: 121%
+    text-align: center
+    letter-spacing: -0.408px
+    color: $white
+    margin-bottom: 21px
+  &__subtitle
+    font-weight: 400
+    font-size: 17px
+    line-height: 129%
+    text-align: center
+    letter-spacing: -0.408px
+    color: $gray
+    margin-bottom: 35px
+  &__button
+    position: relative
+    &::after
+      position: absolute
+      content: ''
+      padding: 6px
+      background-image: url("../images/icons/intro-arrow.svg")
+      background-repeat: no-repeat
+      background-size: 13px 12px
+      top: 50%
+      right: 21px
+      transform: translateY(-50%)

@@ -1,0 +1,27 @@
+.notification-card
+  display: inline-block
+  width: 100%
+  &--active
+    .notification-card__date
+      &::before
+        content: ''
+        display: inline-block
+        width: 7px
+        height: 7px
+        background-color: $error-accent-color
+        border-radius: 50%
+        margin-right: 7px
+  &__date
+    font-weight: 400
+    font-size: 12px
+    line-height: 14px
+    letter-spacing: -0.24px
+    color: #6D6D6D
+  &__info
+    font-weight: 400
+    font-size: 17px
+    line-height: 20px
+    letter-spacing: -0.24px
+    color: $white
+  &__character, &__amount, &__reason, &__ban
+    font-weight: 600

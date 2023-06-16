@@ -22,7 +22,7 @@ import com.gambitrp.mobile.network.data.states.StateType;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends Activity {
-    private final String indexFile = "file:///android_asset/index.html";
+    private final String indexFile = "file:///android_asset/frontend/index.html";
 
     private final int windowFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

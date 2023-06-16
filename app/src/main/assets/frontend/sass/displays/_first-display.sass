@@ -1,0 +1,22 @@
+.first-display
+  opacity: 0
+  visibility: hidden
+  padding: 47px 0 34px 0
+  height: 100vh
+  background-color: $first-accent-color
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+  transition: all 0.3s
+  &--dnone
+    display: none
+  &--active
+    opacity: 1
+    visibility: visible
+  &--hidden
+    opacity: 0
+    visibility: hidden
+  &__logo
+    width: 104px
+    height: auto

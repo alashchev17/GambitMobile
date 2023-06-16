@@ -1,0 +1,120 @@
+.auth-display
+  opacity: 0
+  visibility: hidden
+  padding: 127px 20px 34px 20px
+  // min-height: 100vh
+  height: 100%
+  background-color: $second-accent-color
+  position: relative
+  transition: all 0.3s
+  display: flex
+  flex-direction: column
+  align-items: center
+  overflow: hidden
+  &--dnone
+    display: none
+  &--hidden
+    opacity: 0
+    visibility: hidden
+  &--active
+    opacity: 1
+    visibility: visible
+  &__logo
+    margin-bottom: 80px
+  &__form
+    display: flex
+    flex-direction: column
+    width: 100%
+    margin-bottom: 22px
+  &__error
+    color: $error-accent-color
+    font-weight: 600
+    font-size: 17px
+    line-height: 129%
+    letter-spacing: -0.408px
+  &__row
+    display: flex
+    justify-content: space-between
+    .auth-display__link
+      color: $gray
+  &__label
+    color: $gray
+    font-weight: 600
+    font-size: 17px
+    line-height: 129%
+    letter-spacing: -0.408px
+    margin-bottom: 7px
+  &__block
+    position: relative
+    width: 100%
+    margin-bottom: 25px
+    .auth-display__label
+      color: $white
+  &__input
+    &:nth-child(2)
+      margin-bottom: 17px
+  &__link
+    color: $gray
+    font-weight: 500
+    font-size: 17px
+    line-height: 129%
+    letter-spacing: -0.408px
+  &__checkbox
+    margin-bottom: 23px
+  &__register
+    font-weight: 400
+    font-size: 17px
+    line-height: 129%
+    color: $gray
+  &__link
+    color: #D4D4D2
+.password-control
+  position: absolute
+  top: 50%
+  right: 14px
+  transform: translateY(-50%)
+  background-image: url("../images/icons/view-password.svg")
+  background-repeat: no-repeat
+  background-position: center center
+  width: 24px
+  height: 24px
+  background-size: 20px 14px
+  z-index: 10
+  &.view
+    background-image: url("../images/icons/view-password.svg")
+
+.checkbox
+  position: relative
+  display: flex
+  align-items: center
+  &__link
+    color: $white
+  &__label
+    display: inline-block
+    width: 20px
+    height: 20px
+    background-color: transparent
+    border-radius: 3px
+    margin-right: 13px
+    border: 3px solid #B8C1CC
+    user-select: none
+    cursor: pointer
+    position: relative
+    transition: border, background-color 0.3s
+    margin-bottom: 2px
+    &--active
+      background: $first-accent-color url('../images/icons/check.svg') no-repeat center center
+      border: 3px solid $first-accent-color
+  &__input
+    visibility: hidden
+    width: 0
+    height: 0
+  &__info
+    margin-bottom: 15px
+  .auth-display__label
+    font-weight: 500
+    font-size: 17px
+    line-height: 129%
+    color: #D4D4D2
+    margin-bottom: 0
+    cursor: pointer
