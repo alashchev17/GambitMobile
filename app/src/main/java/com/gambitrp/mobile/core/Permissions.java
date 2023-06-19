@@ -9,7 +9,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 public class Permissions {
-    private static final String prefs = "GambitMobilePrefs";
+    public static final String prefs = "GambitMobilePrefs";
 
     public interface PermissionResponse {
         @RequiresApi(api = Build.VERSION_CODES.M)

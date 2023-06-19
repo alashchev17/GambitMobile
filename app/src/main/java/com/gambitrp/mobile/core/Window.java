@@ -8,6 +8,7 @@ import com.gambitrp.mobile.MainActivity;
 import com.gambitrp.mobile.core.configs.LauncherConfig;
 import com.gambitrp.mobile.network.WebSocket;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.lang.ref.WeakReference;
 
@@ -23,6 +24,15 @@ public class Window extends Application {
         Context context = getApplicationContext();
 
         FirebaseApp.initializeApp(context);
+
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            if (token != null) {
+                context.getSharedPreferences(Permissions.prefs, MODE_PRIVATE).edit().putString("androidToken",
+                        token).apply();
+
+                System.out.println("[CLIENT] androidToken: " + token);
+            }
+        });
 
         Window.context = new WeakReference<>(context);
     }
