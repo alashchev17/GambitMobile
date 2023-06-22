@@ -31,7 +31,11 @@ class App extends View {
       let hour = a.getHours();
       let min = a.getMinutes();
       let sec = a.getSeconds();
-      let time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
+      // формируем строку со временем по формату "00 мес 0000 00:00:00"
+      let time = `${date} ${month} ${year} `;
+      time += ((hour < 10) ? "0" : "") + hour;
+      time += ((min < 10) ? ":0" : ":") + min;
+      time += ((sec < 10) ? ":0" : ":") + sec;
       return time;
     }
   checkboxData(selectors) {
@@ -119,32 +123,35 @@ class App extends View {
         // парсим response и подгружаем уведомления
         let notificationResponse = JSON.parse(data);
         console.log("Данные третьего кейса: ", notificationResponse);
+        if (notificationResponse !== null) {
+          if (this.selectors.notificationCardsBlock.hasChildNodes()) {
+            this.selectors.notificationCardsBlock.removeChild(this.selectors.notificationCardsBlock.childNodes[0]);
+          }
+          for (let i = 0; i != notificationResponse.length; i++) {
+            let date = this.timeConverter(notificationResponse[i].date);
+            let classes = `notification-card notification-content__card ${(notificationResponse[i].status == -1) ? 'notification-card--active' : ""}`;
 
-        for (let i = 0; i != notificationResponse.length; i++) {
-          let date = this.timeConverter(notificationResponse[i].date);
-          this.selectors.notificationCardsBlock.innerHTML += `
-            <a href="#" class="notification-card notification-content__card">
+            let card = document.createElement("a");
+            card.className = `${classes}`;
+            card.innerHTML = `
               <span class="notification-card__date">${date}</span>
               <p class="notification-card__info">${notificationResponse[i].text}</p>
-            </a>
-            <!-- /.notification-content__card -->
-          `;
-        }
-        if (notificationResponse.some(item => item.status == -1)) {
-          this.selectors.notificationOpen.classList.add(this.selectors.notificationOpen.classList[0] + this.active);
-          this.selectors.notificationRead.classList.add(this.selectors.notificationRead.classList[0] + this.active);
-        } else {
-          this.selectors.notificationOpen.classList.remove(this.selectors.notificationOpen.classList[0] + this.active);
-          this.selectors.notificationRead.classList.remove(this.selectors.notificationRead.classList[0] + this.active);
-        }
-        let notifications = document.querySelectorAll(".notification-card");
-        for (let i = 0; i != notifications.length; i++) {
-          if (notificationResponse[i].status == -1) {
-            notifications[i].classList.add("notification-card--active");
+            `;
+            this.selectors.notificationCardsBlock.prepend(card);
           }
+          if (notificationResponse.some(item => item.status == -1)) {
+            this.selectors.notificationOpen.classList.add(this.selectors.notificationOpen.classList[0] + this.active);
+            this.selectors.notificationRead.classList.add(this.selectors.notificationRead.classList[0] + this.active);
+          } else {
+            this.selectors.notificationOpen.classList.remove(this.selectors.notificationOpen.classList[0] + this.active);
+            this.selectors.notificationRead.classList.remove(this.selectors.notificationRead.classList[0] + this.active);
+          }
+          let notifications = document.querySelectorAll(".notification-card");
+          this.notificationCardsArray = Array.prototype.slice.call(notifications);
+          this.notificationsHandler(this.selectors);
+        } else {
+          this.selectors.notificationCardsBlock.innerHTML = `<h2 class="notification-content__title">Уведомлений нет</h2>`;
         }
-        this.notificationCardsArray = Array.prototype.slice.call(notifications);
-        this.notificationsHandler(this.selectors);
         break;
     }
   }
